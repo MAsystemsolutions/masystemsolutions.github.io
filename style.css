@@ -175,3 +175,21 @@ footer .links{display:flex;gap:18px;flex-wrap:wrap}
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}.reveal.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* contact form modal */
+.form-panel{max-width:640px}
+.form-body{padding:20px 26px 26px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}
+.field label{font-size:.85rem;font-weight:600}.field label span{color:var(--gold)}
+.field input,.field select,.field textarea{font:inherit;font-size:.95rem;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:11px 12px;width:100%}
+.field textarea{min-height:120px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-soft)}
+.field .err{font-size:.78rem;color:#C0392B;min-height:0}
+.field.bad input,.field.bad textarea{border-color:#C0392B}
+.hp{position:absolute;left:-9999px}
+.form-note{font-size:.8rem;color:var(--sub);margin:12px 0 0}
+.form-msg{display:none;padding:14px 16px;border-radius:10px;margin-top:14px;font-size:.92rem}
+.form-msg.ok{display:block;background:rgba(39,174,96,.12);border:1px solid rgba(39,174,96,.4)}
+.form-msg.fail{display:block;background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.4)}
+.form-actions{display:flex;gap:10px;align-items:center;margin-top:16px;flex-wrap:wrap}
+@media (max-width:600px){.fgrid{grid-template-columns:1fr}}

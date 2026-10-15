@@ -36,13 +36,30 @@
 <a class="brand" href="/" aria-label="MA System Solutions home"><span class="brand-mark">MA</span><span class="brand-name">MA System Solutions<small>by Mia Marie Briones</small></span></a>
 <nav class="nav-links" aria-label="Main">
 <a href="/index.html#systems">Systems</a><a href="/index.html#pricing">Pricing</a><a href="/index.html#services">Services</a><a href="/index.html#about">About</a><a href="/index.html#hire">Hire me</a><a href="/index.html#contact">Contact</a>
-<a class="btn btn-gold btn-sm" href="mailto:miabr.marie@gmail.com?subject=Hiring%20Inquiry%20%E2%80%93%20Executive%20Assistant%20%26%20Systems&body=Hi%20Mia%2C%0A%0AI%20would%20like%20to%20talk%20about%20hiring%20you.%0A%0AName%3A%0ACompany%3A%0ARole%20/%20needs%3A%0A%0AThank%20you%21">Hire me</a>
+<a class="btn btn-gold btn-sm" href="#contact" data-form="hire">Hire me</a>
 </nav>
 <div style="display:flex;gap:8px"><button class="icon-btn" data-theme-toggle aria-label="Toggle theme"><i class="ti ti-moon"></i></button><button class="icon-btn menu-btn" aria-label="Open menu"><i class="ti ti-menu-2"></i></button></div>
 </div></header>
 <main id="main"><section class="sys-hero" style="min-height:60vh;display:flex;align-items:center"><div class="wrap center"><span class="eyebrow">404</span><h1>Page not found</h1><p style="margin:0 auto 24px">The page you’re looking for doesn’t exist.</p><a class="btn btn-gold" href="/">Back to home</a></div></section></main><footer><div class="wrap">
 <div>© <span data-year>2026</span> MA System Solutions · Mia Marie Briones · Philippines (remote worldwide)</div>
-<div class="links"><a href="mailto:miabr.marie@gmail.com">Email</a><a href="https://www.linkedin.com/in/miamariebriones17/" target="_blank" rel="noopener">LinkedIn</a><a href="https://wa.me/639056651711" target="_blank" rel="noopener">WhatsApp</a><a href="/sitemap.xml">Sitemap</a></div>
+<div class="links"><a href="https://mail.google.com/mail/?view=cm&fs=1&to=miabr.marie%40gmail.com">Email</a><a href="https://www.linkedin.com/in/miamariebriones17/" target="_blank" rel="noopener">LinkedIn</a><a href="https://wa.me/639056651711" target="_blank" rel="noopener">WhatsApp</a><a href="/sitemap.xml">Sitemap</a></div>
 </div></footer>
+<div class="modal" id="formModal" role="dialog" aria-modal="true" aria-labelledby="fTitle"><div class="panel form-panel">
+<div class="panel-head"><div><span class="tag">MA System Solutions</span><h3 id="fTitle">Let’s work together</h3></div><button class="close" type="button" aria-label="Close">×</button></div>
+<form class="form-body" id="contactForm" novalidate>
+<p style="margin:0 0 16px;color:var(--sub);font-size:.93rem">Send your message and it goes straight to my inbox. I usually reply within a day.</p>
+<div class="fgrid">
+<div class="field"><label for="fName">Your name <span>*</span></label><input id="fName" name="name" autocomplete="name" placeholder="Jane Smith"><small class="err"></small></div>
+<div class="field"><label for="fEmail">Your email <span>*</span></label><input id="fEmail" name="email" type="email" autocomplete="email" placeholder="jane@company.com"><small class="err"></small></div>
+<div class="field"><label for="fCompany">Company</label><input id="fCompany" name="company" autocomplete="organization" placeholder="ABC Corp"></div>
+<div class="field"><label for="fType">I’m interested in</label><select id="fType" name="inquiry">
+<option value="hire">Hiring Mia (systems free)</option><option value="quote">Buying a system</option><option value="custom">A custom build</option><option value="notify">Launch updates</option><option value="other">Something else</option></select></div>
+<div class="field full"><label for="fSystem">System</label><select id="fSystem" name="system"><option>Not sure yet</option><option>Zedly</option><option>Medical Hub</option><option>Real Estate Transaction Portal</option><option>HVAC Job Pipeline</option><option>Customer Success Tracker</option><option>Complaint Center</option><option>Project Tracker Portal</option><option>Co-op Fund &amp; Lending Portal</option><option>Petsa De Peligro</option><option>HR Hub</option><option>HOA System</option><option>SignIt</option><option>Retail Inventory App</option></select></div>
+<div class="field full"><label for="fMsg">Message <span>*</span></label><textarea id="fMsg" name="message" placeholder="Tell me about your business, the role, or what you need."></textarea><small class="err"></small></div>
+</div>
+<input class="hp" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+<div class="form-actions"><button class="btn btn-gold" type="submit" id="fSend"><i class="ti ti-send"></i> Send message</button><span class="form-note">Or reach me on <a href="https://www.linkedin.com/in/miamariebriones17/" target="_blank" rel="noopener" style="color:var(--gold)">LinkedIn</a> · <a href="https://wa.me/639056651711" target="_blank" rel="noopener" style="color:var(--gold)">WhatsApp</a></span></div>
+<div class="form-msg" id="fResult" role="status" aria-live="polite"></div>
+</form></div></div>
 <script src="/main.js" defer></script>
 </body></html>
