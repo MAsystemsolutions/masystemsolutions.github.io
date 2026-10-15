@@ -106,7 +106,7 @@ h2{font-size:clamp(2rem,4vw,2.8rem)}h3{font-size:1.45rem}
 .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px}
 .price{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:30px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
 .price.featured{border:2px solid var(--gold);position:relative}
-.price.featured:before{content:"Best value";position:absolute;top:-12px;left:30px;background:var(--gold);color:var(--navy);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:6px}
+.price.featured:before{content:"Most popular";position:absolute;top:-12px;left:30px;background:var(--gold);color:var(--navy);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:6px}
 .price .amt{font-family:var(--serif);font-size:2.6rem;font-weight:600;line-height:1}.price .amt small{font-family:var(--sans);font-size:.9rem;color:var(--sub);font-weight:400}
 .price ul{list-style:none;padding:0;margin:6px 0 16px;flex:1}.price li{padding:6px 0 6px 24px;position:relative;font-size:.93rem;color:var(--sub)}.price li:before{content:"\2713";position:absolute;left:0;color:var(--gold);font-weight:700}
 .fine{margin-top:36px;background:var(--card);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:0;padding:24px 28px}

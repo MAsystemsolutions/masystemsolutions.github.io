@@ -59,7 +59,7 @@
   var fModal = document.getElementById('formModal');
   var form = document.getElementById('contactForm');
   var ENDPOINT = 'https://formsubmit.co/ajax/' + EMAIL;
-  var TYPE_LABEL = { hire: 'Hiring inquiry', quote: 'Quote request', custom: 'Custom build request', notify: 'Launch updates', other: 'New message' };
+  var TYPE_LABEL = { hire: 'Hiring inquiry', starter: 'Quote request (Starter)', professional: 'Quote request (Professional)', quote: 'Quote request', custom: 'Quote request (Custom build)', notify: 'Launch updates', other: 'New message' };
   var fLast = null;
   function openForm(type, system) {
     if (!fModal) return;
@@ -207,9 +207,9 @@
       (s.sample ? '<div class="sample"><i class="ti ti-info-circle"></i> ' + s.sample + '</div>' : '') +
       '<h4>What it does</h4><p style="color:var(--sub);font-size:.93rem;margin-top:0">' + s.short + '</p>' +
       '<h4>Key features</h4><ul>' + feats + '</ul>' +
-      '<p style="font-size:.9rem;margin:0 0 12px"><b>From $50</b> &nbsp;·&nbsp; <span style="color:var(--gold);font-weight:700">FREE when you hire me</span></p>' +
+      '<p style="font-size:.9rem;margin:0 0 12px"><b>Starter · Professional · Custom</b> &nbsp;·&nbsp; <span style="color:var(--gold);font-weight:700">FREE when you hire me</span></p>' +
       '<div class="stack">' +
-      '<a class="btn btn-gold" href="#contact" data-form="quote" data-system="' + s.name + '"><i class="ti ti-mail"></i> Request a quote</a>' +
+      '<a class="btn btn-gold" href="#contact" data-form="quote" data-system="' + s.name + '"><i class="ti ti-mail"></i> Get a quote</a>' +
       '<a class="btn btn-ghost" href="#contact" data-form="hire" data-system="' + s.name + '"><i class="ti ti-briefcase"></i> Hire me, get it free</a>' +
       '<a class="btn btn-ghost" href="' + s.slug + '.html"><i class="ti ti-file-description"></i> Full details</a>' +
       '</div>';
