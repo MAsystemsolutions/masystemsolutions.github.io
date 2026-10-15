@@ -1,0 +1,59 @@
+MA SYSTEM SOLUTIONS – HOW TO PUT YOUR SITE ONLINE
+=================================================
+
+1) CREATE THE REPOSITORY
+   - Log in to GitHub as "masystemsolutions".
+   - Click "+" (top right) > New repository.
+   - Repository name (type exactly):  masystemsolutions.github.io
+   - Set it to Public > Create repository.
+
+2) UPLOAD THE FILES
+   - Unzip the file on your computer.
+   - In the new repository, click "uploading an existing file".
+   - Drag EVERYTHING inside the unzipped folder into the page
+     (index.html, 404.html, robots.txt, sitemap.xml, .nojekyll,
+      and the folders: assets, images, systems).
+   - Keep the folders as they are. Do not rename anything.
+   - Click "Commit changes".
+   Tip: ".nojekyll" may be hidden on your computer. If you can't see it,
+   it's fine to skip it.
+
+3) TURN ON GITHUB PAGES
+   - Repository > Settings > Pages.
+   - Source: "Deploy from a branch" > Branch: main > folder: / (root) > Save.
+   - After 1–2 minutes your site is live at:
+     https://masystemsolutions.github.io/
+
+4) MAKE THE VIDEOS PLAY
+   In Google Drive, right-click each video > Share > General access:
+   "Anyone with the link" – Viewer. (Meet Mia, Why hire me, Petsa, HOA)
+
+5) LET APPS SCRIPT SYSTEMS SHOW INSIDE YOUR SITE
+   In each Apps Script project (Customer Success Tracker, Complaint Center,
+   Project Tracker Portal, Co-op Fund, and any GitHub system that loads
+   an Apps Script page), find doGet() and add this to the line that
+   returns the page:
+
+     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+
+   Example:
+     return HtmlService.createHtmlOutputFromFile('index')
+       .setTitle('Complaint Center')
+       .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+
+   Then Deploy > Manage deployments > Edit > Version: New version > Deploy.
+
+6) GET ON GOOGLE
+   - Go to https://search.google.com/search-console and sign in.
+   - Add property > "URL prefix" > https://masystemsolutions.github.io/
+   - Choose "HTML tag" verification. Copy the tag Google gives you.
+   - Open index.html, find the line that says PASTE-YOUR-CODE-HERE,
+     replace that whole commented line with Google's tag, and upload
+     index.html again. Then click Verify.
+   - In Search Console > Sitemaps, submit:  sitemap.xml
+   - Add https://masystemsolutions.github.io/ to your LinkedIn
+     (Contact info + Featured) and GitHub profile.
+
+7) UPDATING LATER
+   Edit the file on GitHub (pencil icon) or upload the new version.
+   Changes go live in 1–2 minutes.
