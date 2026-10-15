@@ -126,7 +126,7 @@
       '<div class="stack">' +
       '<a class="btn btn-gold" href="' + quoteLink(s.name) + '"><i class="ti ti-mail"></i> Request a quote</a>' +
       '<a class="btn btn-ghost" href="' + hireLink() + '"><i class="ti ti-briefcase"></i> Hire me, get it free</a>' +
-      '<a class="btn btn-ghost" href="systems/' + s.slug + '.html"><i class="ti ti-file-description"></i> Full details</a>' +
+      '<a class="btn btn-ghost" href="' + s.slug + '.html"><i class="ti ti-file-description"></i> Full details</a>' +
       '</div>';
     render(s, s.mode === 'video' ? 'video' : 'live');
     modal.classList.add('open');
