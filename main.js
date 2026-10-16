@@ -55,6 +55,55 @@
   document.querySelectorAll('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
 
+
+  /* ---------- fast, phone-friendly demos and videos ---------- */
+  var isPhone = window.matchMedia && window.matchMedia('(max-width: 760px)').matches;
+  function liveFrame(src, title) {
+    var wrap = document.createElement('div');
+    wrap.innerHTML = '<div class="loader"><div class="spin"></div><b>Starting the live demo…</b><span>The first load can take 5–15 seconds while the system wakes up.</span></div>' +
+      '<iframe src="' + src + '" title="' + title + '" allow="clipboard-write; fullscreen"></iframe>';
+    var ifr = wrap.querySelector('iframe'), ld = wrap.querySelector('.loader');
+    ifr.addEventListener('load', function () { ld.classList.add('done'); });
+    setTimeout(function () { ld.classList.add('done'); }, 20000);
+    return wrap;
+  }
+  function phoneCard(src, title, onLoadHere) {
+    var d = document.createElement('div');
+    d.className = 'phone-demo';
+    d.innerHTML = '<i class="ti ti-device-mobile big"></i><b>Best viewed full screen on phones</b>' +
+      '<p>Open the live demo in its own tab for the smoothest experience. The first load can take a few seconds.</p>' +
+      '<div class="row"><a class="btn btn-gold btn-sm" href="' + src + '" target="_blank" rel="noopener"><i class="ti ti-external-link"></i> Open live demo</a>' +
+      '<button class="btn btn-line btn-sm" type="button">Load here anyway</button></div>';
+    d.querySelector('button').addEventListener('click', onLoadHere);
+    return d;
+  }
+  function mountDemo(slot, src, title) {
+    slot.innerHTML = '';
+    if (isPhone) {
+      slot.appendChild(phoneCard(src, title, function () { slot.innerHTML = ''; slot.appendChild(liveFrame(src, title)); }));
+    } else { slot.appendChild(liveFrame(src, title)); }
+  }
+  window.MA_mountDemo = mountDemo;
+  /* demo slots on system pages: load only when scrolled near */
+  var slots = document.querySelectorAll('.demo-slot');
+  if (slots.length) {
+    var go = function (el) { mountDemo(el, el.getAttribute('data-src'), el.getAttribute('data-title')); };
+    if ('IntersectionObserver' in window) {
+      var so = new IntersectionObserver(function (en) { en.forEach(function (x) { if (x.isIntersecting) { go(x.target); so.unobserve(x.target); } }); }, { rootMargin: '200px' });
+      slots.forEach(function (s) { so.observe(s); });
+    } else { slots.forEach(go); }
+  }
+  /* tap-to-play videos */
+  document.addEventListener('click', function (e) {
+    var v = e.target.closest('.vfacade');
+    if (!v) return;
+    var f = document.createElement('iframe');
+    f.src = v.getAttribute('data-src');
+    f.title = v.getAttribute('aria-label') || 'Video';
+    f.setAttribute('allow', 'autoplay; fullscreen'); f.setAttribute('allowfullscreen', '');
+    v.parentNode.replaceChild(f, v);
+  });
+
   /* ---------- contact form (every page) ---------- */
   var fModal = document.getElementById('formModal');
   var form = document.getElementById('contactForm');
@@ -188,11 +237,12 @@
     mTabs.appendChild(open);
 
     if (view === 'video') {
-      mFrame.innerHTML = frameHTML('https://drive.google.com/file/d/' + s.video + '/preview', true, s.name + ' – video walkthrough') +
+      mFrame.innerHTML = '<div class="frame video"><div class="frame-bar"><div class="dots"><i></i><i></i><i></i></div><span>' + s.name + ' – video walkthrough</span></div><button class="vfacade" type="button" data-src="https://drive.google.com/file/d/' + s.video + '/preview" aria-label="Play video: ' + s.name + '"><span class="vplay"><i class="ti ti-player-play"></i></span><span class="vlabel">Tap to play video</span></button></div>' +
         '<p class="frame-note">Want to explore it yourself? Use “Open the app” above.</p>';
     } else {
-      mFrame.innerHTML = frameHTML(s.url, false, s.name + ' – live demo') +
+      mFrame.innerHTML = '<div class="frame"><div class="frame-bar"><div class="dots"><i></i><i></i><i></i></div><span>' + s.name + ' – live demo</span></div><div class="demo-host"></div></div>' +
         '<p class="frame-note">If the demo doesn’t load here, use “Open in new tab” above.</p>';
+      mountDemo(mFrame.querySelector('.demo-host'), s.url, s.name + ' – live demo');
     }
   }
 
