@@ -60,7 +60,7 @@
   var isPhone = window.matchMedia && window.matchMedia('(max-width: 760px)').matches;
   function liveFrame(src, title) {
     var wrap = document.createElement('div');
-    wrap.innerHTML = '<div class="loader"><div class="spin"></div><b>Starting the live demo…</b><span>The first load can take 5–15 seconds while the system wakes up.</span></div>' +
+    wrap.innerHTML = '<div class="loader"><div class="spin"></div><b>Starting the live demo…</b>' + (isFast(src) ? '' : '<span>The first load can take 5–15 seconds while the system wakes up.</span>') + '</div>' +
       '<iframe src="' + src + '" title="' + title + '" allow="clipboard-write; fullscreen"></iframe>';
     var ifr = wrap.querySelector('iframe'), ld = wrap.querySelector('.loader');
     ifr.addEventListener('load', function () { ld.classList.add('done'); });
@@ -77,9 +77,10 @@
     d.querySelector('button').addEventListener('click', onLoadHere);
     return d;
   }
+  function isFast(src) { return /(^|\/)demo-[a-z-]+\.html/.test(src) && src.indexOf('masystemsolutions.github.io') > -1; }
   function mountDemo(slot, src, title) {
     slot.innerHTML = '';
-    if (isPhone) {
+    if (isPhone && !isFast(src)) {
       slot.appendChild(phoneCard(src, title, function () { slot.innerHTML = ''; slot.appendChild(liveFrame(src, title)); }));
     } else { slot.appendChild(liveFrame(src, title)); }
   }
@@ -178,6 +179,11 @@
         .then(function () { btn.disabled = false; btn.innerHTML = '<i class="ti ti-send"></i> Send message'; });
     });
   }
+
+  try {
+    var inq = new URLSearchParams(location.search).get('inquire');
+    if (inq && form) { setTimeout(function () { openForm('quote', inq); }, 300); history.replaceState(null, '', location.pathname + '#contact'); }
+  } catch (e) {}
 
   /* ---------- catalog (home page only) ---------- */
   var SYSTEMS = window.SYSTEMS || [];

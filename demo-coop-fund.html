@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Co-op Fund &amp; Lending Portal – Live Demo | MA System Solutions</title>
+<meta name="description" content="Interactive demo of the Co-op Fund &amp; Lending Portal: member deposits, loans with amortization, dividends and member exits. Built by Mia Marie Briones.">
+<meta name="author" content="Mia Marie Briones">
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#0F1729">
+<link rel="icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+:root{--accent:#2F6FED;--accent-ink:#fff;--accent-soft:rgba(47,111,237,.1);--ink:#0F172A;--sub:#64748B;--muted:#94A3B8;--line:#E6E8EF;--bg:#F5F6FA;--card:#fff;--side:#0F1729;--side-ink:#AEB8CB;--ok:#15803D;--ok-bg:#E7F6EC;--warn:#B45309;--warn-bg:#FEF3E2;--bad:#B91C1C;--bad-bg:#FDECEC;--info:#1D4ED8;--info-bg:#E8EFFD;--gray-bg:#EEF0F4;--r:12px;--sh:0 1px 2px rgba(15,23,42,.05),0 4px 16px rgba(15,23,42,.05)}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.5}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--accent)}
+.app{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh}
+/* sidebar */
+.side{background:var(--side);color:var(--side-ink);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;padding:18px 14px}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px 18px;color:#fff}
+.brand-ico{width:36px;height:36px;border-radius:10px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:19px;flex:none}
+.brand b{display:block;font-size:15px;line-height:1.2}.brand small{font-size:11px;color:var(--side-ink)}
+.nav{display:flex;flex-direction:column;gap:2px;margin-top:6px}
+.nav-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:#6B7890;padding:14px 10px 6px}
+.nav a{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:8px;color:var(--side-ink);text-decoration:none;font-weight:500}
+.nav a i{font-size:18px}.nav a:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav a.active{background:rgba(255,255,255,.1);color:#fff}
+.nav a.active i{color:var(--accent-2,var(--accent))}
+.nav .count{margin-left:auto;font-size:11px;background:rgba(255,255,255,.12);padding:1px 7px;border-radius:999px;color:#fff}
+.side-foot{margin-top:auto;border-top:1px solid rgba(255,255,255,.08);padding-top:14px}
+.role{display:flex;align-items:center;gap:10px;padding:8px;border-radius:10px;background:rgba(255,255,255,.05)}
+.avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:12px;background:var(--accent-soft);color:var(--accent);flex:none}
+.side .avatar{background:rgba(255,255,255,.12);color:#fff}
+.role b{display:block;color:#fff;font-size:13px;line-height:1.2}.role small{font-size:11px}
+.role select{margin-top:8px;width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff;border-radius:8px;padding:6px 8px;font-size:12px}
+.role select option{color:#000}
+/* main */
+.main{min-width:0;display:flex;flex-direction:column}
+.demo-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 24px;background:#111A2E;color:#D7DEEA;font-size:12.5px}
+.demo-bar .pill{background:#C9A227;color:#14213D;font-weight:700;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:5px}
+.demo-bar .sp{flex:1}
+.demo-bar button,.demo-bar a{background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:7px;padding:4px 10px;font-size:12px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.demo-bar a.cta{background:#C9A227;border-color:#C9A227;color:#14213D;font-weight:600}
+.top{height:64px;display:flex;align-items:center;gap:14px;padding:0 24px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.top h1{font-size:18px;margin:0;font-weight:650;letter-spacing:-.01em}
+.top .crumb{font-size:12px;color:var(--sub)}
+.top .sp{flex:1}
+.search{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:7px 11px;width:260px;color:var(--sub)}
+.search input{border:0;background:transparent;outline:none;width:100%}
+.icon-btn{width:36px;height:36px;border-radius:9px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;color:var(--sub);font-size:18px;position:relative}
+.icon-btn:hover{color:var(--ink)}
+.icon-btn .dot{position:absolute;top:7px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--bad)}
+.menu-toggle{display:none}
+.content{padding:24px;display:flex;flex-direction:column;gap:18px;max-width:1400px;width:100%}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.page-head h2{margin:0;font-size:22px;letter-spacing:-.02em;font-weight:700}
+.page-head p{margin:2px 0 0;color:var(--sub)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+/* cards */
+.grid{display:grid;gap:16px}
+.g-4{grid-template-columns:repeat(4,minmax(0,1fr))}.g-3{grid-template-columns:repeat(3,minmax(0,1fr))}.g-2{grid-template-columns:repeat(2,minmax(0,1fr))}.g-21{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);min-width:0}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.card-h h3{margin:0;font-size:14px;font-weight:650}.card-h small{color:var(--sub)}
+.card-b{padding:16px 18px}
+.kpi{padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.kpi .lbl{display:flex;align-items:center;gap:8px;color:var(--sub);font-size:12.5px;font-weight:500}
+.kpi .lbl i{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-size:16px}
+.kpi .val{font-size:26px;font-weight:700;letter-spacing:-.02em}
+.kpi .delta{font-size:12px;color:var(--sub)}.delta.up{color:var(--ok)}.delta.down{color:var(--bad)}
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:9px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-weight:550;font-size:13px;text-decoration:none;color:var(--ink);white-space:nowrap}
+.btn:hover{border-color:#CBD2DE}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.danger{color:var(--bad)}
+.btn.sm{padding:5px 10px;font-size:12px;border-radius:7px}
+.btn i{font-size:16px}
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:600;white-space:nowrap;background:var(--gray-bg);color:#475569}
+.badge.ok{background:var(--ok-bg);color:var(--ok)}.badge.warn{background:var(--warn-bg);color:var(--warn)}.badge.bad{background:var(--bad-bg);color:var(--bad)}.badge.info{background:var(--info-bg);color:var(--info)}.badge.acc{background:var(--accent-soft);color:var(--accent)}
+.badge .d{width:6px;height:6px;border-radius:50%;background:currentColor}
+/* tables */
+.tbl-wrap{overflow-x:auto}
+table.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;font-weight:600;color:var(--sub);font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;padding:10px 14px;border-bottom:1px solid var(--line);background:#FAFBFC;white-space:nowrap}
+.tbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr.click{cursor:pointer}.tbl tbody tr.click:hover{background:#FAFBFD}
+.tbl .num{text-align:right;font-variant-numeric:tabular-nums}
+.cell-main{display:flex;align-items:center;gap:10px}.cell-main b{display:block;font-weight:600}.cell-main small{color:var(--sub)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}
+.toolbar .search{width:240px;background:var(--card)}
+select.sel,input.inp,textarea.inp{border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:var(--card);outline:none}
+select.sel:focus,input.inp:focus,textarea.inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.empty{padding:40px;text-align:center;color:var(--sub)}
+/* progress */
+.bar{height:7px;background:var(--gray-bg);border-radius:999px;overflow:hidden}.bar span{display:block;height:100%;background:var(--accent);border-radius:999px}
+.health{display:inline-flex;align-items:center;gap:8px;min-width:110px}.health .bar{flex:1;min-width:50px}
+/* lists */
+.list{display:flex;flex-direction:column}
+.li{display:flex;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--line)}.li:last-child{border-bottom:0}
+.li .grow{flex:1;min-width:0}.li b{font-weight:600}.li small{color:var(--sub);display:block}
+.ico-sq{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-size:17px;flex:none}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;padding-left:4px}
+.tl-i{display:flex;gap:12px;position:relative;padding-bottom:16px}
+.tl-i:before{content:"";position:absolute;left:14px;top:30px;bottom:0;width:2px;background:var(--line)}
+.tl-i:last-child:before{display:none}
+.tl-i .ico-sq{width:30px;height:30px;border-radius:50%;font-size:14px}
+.tl-i .grow{flex:1;min-width:0}.tl-i small{color:var(--sub)}
+.tl-i p{margin:4px 0 0;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+/* kanban */
+.board{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px;align-items:flex-start}
+.col{background:#EEF0F5;border-radius:12px;min-width:260px;width:260px;flex:none;display:flex;flex-direction:column;max-height:calc(100vh - 230px)}
+.col-h{display:flex;align-items:center;justify-content:space-between;padding:11px 12px;font-weight:650;font-size:13px}
+.col-h .n{background:#fff;border-radius:999px;padding:0 8px;font-size:11.5px;color:var(--sub)}
+.col-b{padding:0 10px 10px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;min-height:60px}
+.col-b.over{background:var(--accent-soft);border-radius:10px}
+.kc{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:grab;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+.kc:hover{border-color:#CBD2DE}.kc b{display:block;font-size:13px}.kc small{color:var(--sub)}
+.kc .meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:6px}
+/* drawer + modal */
+.scrim{position:fixed;inset:0;background:rgba(15,23,42,.42);z-index:50;opacity:0;pointer-events:none;transition:opacity .2s}
+.scrim.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--card);z-index:60;transform:translateX(100%);transition:transform .25s ease;display:flex;flex-direction:column;box-shadow:-10px 0 40px rgba(15,23,42,.15)}
+.drawer.open{transform:none}
+.dr-h{display:flex;align-items:flex-start;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line)}
+.dr-h h3{margin:0;font-size:18px}.dr-h .grow{flex:1;min-width:0}
+.dr-b{flex:1;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:16px}
+.dr-f{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.modal{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.modal .box{background:var(--card);border-radius:14px;width:min(560px,100%);max-height:90vh;overflow:auto;box-shadow:0 20px 60px rgba(15,23,42,.25);animation:pop .18s ease}
+@keyframes pop{from{transform:scale(.97);opacity:0}to{transform:none;opacity:1}}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.f{display:flex;flex-direction:column;gap:5px}.f.full{grid-column:1/-1}
+.f label{font-size:12px;font-weight:600;color:#334155}
+.f .inp,.f .sel{width:100%}
+.f .err{color:var(--bad);font-size:11.5px;display:none}.f.bad .err{display:block}.f.bad .inp{border-color:var(--bad)}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.kv div{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+.kv small{display:block;color:var(--sub);font-size:11.5px}.kv b{font-weight:600}
+.sec-t{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--sub);font-weight:700;margin:0}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);padding:0 18px}
+.tab{padding:11px 12px;border:0;background:none;cursor:pointer;color:var(--sub);font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab.active{color:var(--ink);border-bottom-color:var(--accent)}
+/* stepper */
+.steps{display:flex;gap:0;overflow-x:auto;padding:4px 0 8px}
+.step{flex:1;min-width:84px;text-align:center;position:relative;font-size:11px;color:var(--sub)}
+.step .c{width:26px;height:26px;border-radius:50%;margin:0 auto 6px;display:grid;place-items:center;background:var(--gray-bg);color:var(--sub);font-weight:700;font-size:11px;position:relative;z-index:1}
+.step:before{content:"";position:absolute;top:13px;left:-50%;right:50%;height:2px;background:var(--line)}
+.step:first-child:before{display:none}
+.step.done .c{background:var(--accent);color:var(--accent-ink)}.step.done:before,.step.cur:before{background:var(--accent)}
+.step.cur .c{background:var(--accent-soft);color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.step.cur{color:var(--ink);font-weight:600}
+/* charts */
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{font-size:11px;fill:var(--sub);font-family:inherit}
+.legend{display:flex;flex-direction:column;gap:8px;font-size:12.5px}
+.legend span{display:flex;align-items:center;gap:8px}.legend i{width:10px;height:10px;border-radius:3px;flex:none}
+.legend b{margin-left:auto;font-weight:600}
+.donut-wrap{display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:center}
+/* toast */
+.toasts{position:fixed;bottom:18px;right:18px;z-index:90;display:flex;flex-direction:column;gap:8px}
+.toast{background:#0F172A;color:#fff;padding:11px 14px;border-radius:10px;font-size:13px;display:flex;gap:8px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.2);animation:pop .2s ease}
+.toast i{color:#4ADE80;font-size:17px}
+/* feed */
+.feed-in{display:flex;gap:8px;margin-top:4px}.feed-in .inp{flex:1}
+.mention{color:var(--accent);font-weight:600}
+/* utility */
+.muted{color:var(--sub)}.right{text-align:right}.nowrap{white-space:nowrap}.mt0{margin-top:0}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.big{font-size:20px;font-weight:700}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:12.5px;font-weight:550}
+.chip.active{background:var(--ink);border-color:var(--ink);color:#fff}
+/* responsive */
+@media (max-width:1100px){.g-4{grid-template-columns:repeat(2,minmax(0,1fr))}.g-21{grid-template-columns:1fr}.g-3{grid-template-columns:1fr 1fr}.search{display:none}}
+@media (max-width:860px){
+ .app{grid-template-columns:1fr}
+ .side{position:fixed;left:0;top:0;bottom:0;width:260px;z-index:80;transform:translateX(-100%);transition:transform .25s}
+ .side.open{transform:none}
+ .menu-toggle{display:grid}
+ .top{padding:0 14px}.content{padding:16px}.demo-bar{padding:8px 14px}
+ .g-3,.g-2{grid-template-columns:1fr}
+ .form{grid-template-columns:1fr}
+ .donut-wrap{grid-template-columns:120px 1fr}
+ .kv{grid-template-columns:1fr 1fr}
+ .demo-bar .hide-sm{display:none}
+}
+@media (max-width:520px){.g-4{grid-template-columns:1fr 1fr}.kpi .val{font-size:21px}.top h1{font-size:16px}}
+
+</style>
+</head>
+<body>
+<noscript>This demo needs JavaScript turned on.</noscript>
+<script>
+/* MA System Solutions – demo kit (sample data only, no server) */
+(function () {
+  'use strict';
+  var PORTFOLIO = 'https://masystemsolutions.github.io/';
+  var K = window.K = {};
+
+  /* ---------- utils ---------- */
+  K.esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  K.uid = function (p) { return (p || 'id') + '-' + Math.random().toString(36).slice(2, 8); };
+  K.today = function () { var d = new Date(); d.setHours(0, 0, 0, 0); return d; };
+  K.addDays = function (d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; };
+  K.iso = function (d) { var x = new Date(d); return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0'); };
+  K.day = function (n) { return K.iso(K.addDays(K.today(), n)); };
+  K.parse = function (s) { var p = String(s).slice(0, 10).split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); };
+  K.dfmt = function (s) { if (!s) return '—'; return K.parse(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); };
+  K.dshort = function (s) { if (!s) return '—'; return K.parse(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); };
+  K.diff = function (s) { return Math.round((K.parse(s) - K.today()) / 864e5); };
+  K.rel = function (s) {
+    var n = K.diff(s);
+    if (n === 0) return 'Today'; if (n === 1) return 'Tomorrow'; if (n === -1) return 'Yesterday';
+    return n > 0 ? 'In ' + n + ' days' : Math.abs(n) + ' days ago';
+  };
+  K.ago = function (ts) {
+    var m = Math.round((Date.now() - ts) / 6e4);
+    if (m < 1) return 'Just now'; if (m < 60) return m + 'm ago';
+    var h = Math.round(m / 60); if (h < 24) return h + 'h ago';
+    var d = Math.round(h / 24); return d + 'd ago';
+  };
+  K.num = function (n, dp) { return Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: dp || 0, maximumFractionDigits: dp || 0 }); };
+  K.money = function (n, cur, dp) {
+    cur = cur || (K.APP && K.APP.currency) || 'USD';
+    var sym = cur === 'PHP' ? '₱' : '$';
+    var v = Math.round(Number(n || 0) * Math.pow(10, dp || 0)) / Math.pow(10, dp || 0);
+    return (v < 0 ? '-' : '') + sym + K.num(Math.abs(v), dp || 0);
+  };
+  K.compact = function (n, cur) {
+    var sym = cur === 'PHP' ? '₱' : cur === 'USD' ? '$' : '';
+    var a = Math.abs(n);
+    if (a >= 1e6) return sym + (n / 1e6).toFixed(a >= 1e7 ? 1 : 2).replace(/\.0+$/, '') + 'M';
+    if (a >= 1e3) return sym + (n / 1e3).toFixed(a >= 1e4 ? 0 : 1).replace(/\.0$/, '') + 'K';
+    return sym + K.num(n);
+  };
+  K.initials = function (n) { return String(n || '?').split(/\s+/).filter(Boolean).slice(0, 2).map(function (w) { return w[0]; }).join('').toUpperCase(); };
+  K.pick = function (arr, i) { return arr[i % arr.length]; };
+  K.badge = function (t, cls, dot) { return '<span class="badge ' + (cls || '') + '">' + (dot ? '<span class="d"></span>' : '') + K.esc(t) + '</span>'; };
+  K.avatar = function (name, color) { return '<span class="avatar"' + (color ? ' style="background:' + color + '22;color:' + color + '"' : '') + '>' + K.esc(K.initials(name)) + '</span>'; };
+  K.sum = function (a, f) { return a.reduce(function (s, x) { return s + (f ? f(x) : x); }, 0); };
+  K.by = function (k, desc) { return function (a, b) { var x = typeof k === 'function' ? k(a) : a[k], y = typeof k === 'function' ? k(b) : b[k]; return (x > y ? 1 : x < y ? -1 : 0) * (desc ? -1 : 1); }; };
+
+  /* ---------- store (this browser only) ---------- */
+  var mem = null;
+  function skey() { return 'ma-demo-' + K.APP.key + '-v1'; }
+  K.load = function () {
+    try { var raw = localStorage.getItem(skey()); if (raw) { mem = JSON.parse(raw); return mem; } } catch (e) {}
+    mem = K.APP.seed(); K.save(); return mem;
+  };
+  K.save = function () { try { localStorage.setItem(skey(), JSON.stringify(mem)); } catch (e) {} };
+  K.reset = function () { try { localStorage.removeItem(skey()); } catch (e) {} mem = K.APP.seed(); K.save(); K.db = mem; K.toast('Demo data reset'); K.route(); };
+
+  /* ---------- toast ---------- */
+  K.toast = function (msg) {
+    var box = document.querySelector('.toasts');
+    var t = document.createElement('div'); t.className = 'toast'; t.innerHTML = '<i class="ti ti-circle-check"></i>' + K.esc(msg);
+    box.appendChild(t); setTimeout(function () { t.style.opacity = '0'; t.style.transition = 'opacity .3s'; }, 2400); setTimeout(function () { t.remove(); }, 2800);
+  };
+
+  /* ---------- drawer & modal ---------- */
+  var scrim, drawer, modal, onCloseDrawer;
+  K.drawer = function (o) {
+    drawer.innerHTML = '<div class="dr-h"><div class="grow">' + (o.kicker ? '<small class="muted">' + o.kicker + '</small>' : '') + '<h3>' + o.title + '</h3>' + (o.sub ? '<div class="muted" style="margin-top:4px">' + o.sub + '</div>' : '') + '</div><button class="icon-btn" data-x aria-label="Close"><i class="ti ti-x"></i></button></div>' +
+      '<div class="dr-b">' + o.body + '</div>' + (o.foot ? '<div class="dr-f">' + o.foot + '</div>' : '');
+    drawer.classList.add('open'); scrim.classList.add('open');
+    onCloseDrawer = o.onClose || null;
+    if (o.mount) o.mount(drawer);
+  };
+  K.closeDrawer = function () { drawer.classList.remove('open'); if (!modal.classList.contains('open')) scrim.classList.remove('open'); if (onCloseDrawer) { var f = onCloseDrawer; onCloseDrawer = null; f(); } };
+  K.modal = function (o) {
+    modal.innerHTML = '<div class="box"><div class="dr-h"><div class="grow"><h3>' + o.title + '</h3>' + (o.sub ? '<div class="muted">' + o.sub + '</div>' : '') + '</div><button class="icon-btn" data-mx aria-label="Close"><i class="ti ti-x"></i></button></div>' +
+      '<div class="dr-b">' + o.body + '</div>' + (o.foot ? '<div class="dr-f">' + o.foot + '</div>' : '') + '</div>';
+    modal.classList.add('open'); scrim.classList.add('open');
+    if (o.mount) o.mount(modal);
+    var first = modal.querySelector('input,select,textarea'); if (first) setTimeout(function () { first.focus(); }, 30);
+  };
+  K.closeModal = function () { modal.classList.remove('open'); if (!drawer.classList.contains('open')) scrim.classList.remove('open'); };
+
+  /* ---------- forms ---------- */
+  // fields: [{k,label,type:'text|number|date|select|textarea|email',opts:[],req,full,val,ph,step}]
+  K.formHTML = function (fields) {
+    return '<div class="form">' + fields.map(function (f) {
+      var v = f.val == null ? '' : f.val, id = 'f-' + f.k, ctl;
+      if (f.type === 'select') ctl = '<select class="sel" id="' + id + '" name="' + f.k + '">' + f.opts.map(function (o) { var ov = typeof o === 'object' ? o.v : o, ol = typeof o === 'object' ? o.l : o; return '<option value="' + K.esc(ov) + '"' + (String(ov) === String(v) ? ' selected' : '') + '>' + K.esc(ol) + '</option>'; }).join('') + '</select>';
+      else if (f.type === 'textarea') ctl = '<textarea class="inp" rows="3" id="' + id + '" name="' + f.k + '" placeholder="' + K.esc(f.ph || '') + '">' + K.esc(v) + '</textarea>';
+      else ctl = '<input class="inp" id="' + id + '" name="' + f.k + '" type="' + (f.type || 'text') + '"' + (f.step ? ' step="' + f.step + '"' : '') + (f.min != null ? ' min="' + f.min + '"' : '') + ' value="' + K.esc(v) + '" placeholder="' + K.esc(f.ph || '') + '">';
+      return '<div class="f' + (f.full || f.type === 'textarea' ? ' full' : '') + '" data-k="' + f.k + '"' + (f.req ? ' data-req="1"' : '') + (f.type === 'number' ? ' data-num="1"' : '') + (f.type === 'email' ? ' data-email="1"' : '') + '><label for="' + id + '">' + K.esc(f.label) + (f.req ? ' <span style="color:var(--bad)">*</span>' : '') + '</label>' + ctl + '<span class="err">' + (f.err || 'Required') + '</span></div>';
+    }).join('') + '</div>';
+  };
+  K.readForm = function (root) {
+    var out = {}, ok = true;
+    root.querySelectorAll('.f[data-k]').forEach(function (f) {
+      var el = f.querySelector('input,select,textarea'), v = el.value.trim();
+      var bad = (f.dataset.req && !v) || (f.dataset.email && v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) || (f.dataset.num && v && isNaN(Number(v))) || (f.dataset.num && f.dataset.req && Number(v) <= 0);
+      f.classList.toggle('bad', !!bad); if (bad) ok = false;
+      el.oninput = function () { f.classList.remove('bad'); };
+      out[f.dataset.k] = f.dataset.num ? Number(v || 0) : v;
+    });
+    return ok ? out : null;
+  };
+
+  /* ---------- charts (SVG) ---------- */
+  var PAL = ['var(--accent)', '#0EA5A4', '#F59E0B', '#8B5CF6', '#EF4444', '#64748B', '#22C55E', '#EC4899', '#0EA5E9', '#A3A3A3', '#84CC16'];
+  K.PAL = PAL;
+  K.bars = function (data, o) {
+    o = o || {}; var W = window.innerWidth < 700 ? 480 : (o.w || 560), H = o.h || 220, pl = 44, pb = 28, pt = 10, n = data.length;
+    var max = Math.max.apply(null, data.map(function (d) { return d.v; }).concat([1])); max = o.int ? Math.max(4, Math.ceil(max / 4) * 4) : niceMax(max);
+    var bw = (W - pl) / n, g = '';
+    for (var i = 0; i <= 4; i++) { var y = pt + (H - pt - pb) * (1 - i / 4); g += '<line x1="' + pl + '" x2="' + W + '" y1="' + y + '" y2="' + y + '" stroke="var(--line)"/><text x="' + (pl - 8) + '" y="' + (y + 4) + '" text-anchor="end">' + (o.fmt ? o.fmt(max * i / 4) : K.compact(max * i / 4)) + '</text>'; }
+    data.forEach(function (d, i) {
+      var h = (H - pt - pb) * d.v / max, x = pl + i * bw + bw * 0.2, w = bw * 0.6;
+      g += '<rect x="' + x + '" y="' + (H - pb - h) + '" width="' + w + '" height="' + Math.max(h, 0) + '" rx="4" fill="' + (d.c || o.color || 'var(--accent)') + '"><title>' + K.esc(d.l) + ': ' + (o.fmt ? o.fmt(d.v) : K.num(d.v)) + '</title></rect>';
+      g += '<text x="' + (x + w / 2) + '" y="' + (H - 8) + '" text-anchor="middle">' + K.esc(d.l) + '</text>';
+    });
+    return '<div class="chart"><svg viewBox="0 0 ' + W + ' ' + H + '" role="img">' + g + '</svg></div>';
+  };
+  K.hbars = function (data, o) {
+    o = o || {}; var max = Math.max.apply(null, data.map(function (d) { return d.v; }).concat([1]));
+    return '<div style="display:flex;flex-direction:column;gap:10px">' + data.map(function (d, i) {
+      return '<div><div class="row" style="justify-content:space-between;font-size:12.5px;margin-bottom:4px"><span>' + K.esc(d.l) + '</span><b>' + (o.fmt ? o.fmt(d.v) : K.num(d.v)) + '</b></div><div class="bar"><span style="width:' + (100 * d.v / max) + '%;background:' + (d.c || PAL[i % PAL.length]) + '"></span></div></div>';
+    }).join('') + '</div>';
+  };
+  K.line = function (labels, series, o) {
+    o = o || {}; var W = window.innerWidth < 700 ? 480 : (o.w || 560), H = o.h || 220, pl = 44, pb = 28, pt = 10, n = labels.length;
+    var all = []; series.forEach(function (s) { all = all.concat(s.v); });
+    var raw = Math.max.apply(null, all.concat([1])), max = o.int ? Math.max(4, Math.ceil(raw / 4) * 4) : niceMax(raw);
+    var g = '', step = (W - pl - 10) / Math.max(n - 1, 1);
+    for (var i = 0; i <= 4; i++) { var y = pt + (H - pt - pb) * (1 - i / 4); g += '<line x1="' + pl + '" x2="' + W + '" y1="' + y + '" y2="' + y + '" stroke="var(--line)"/><text x="' + (pl - 8) + '" y="' + (y + 4) + '" text-anchor="end">' + (o.fmt ? o.fmt(max * i / 4) : K.compact(max * i / 4)) + '</text>'; }
+    labels.forEach(function (l, i) { if (n <= 12 || i % 2 === 0) g += '<text x="' + (pl + i * step) + '" y="' + (H - 8) + '" text-anchor="middle">' + K.esc(l) + '</text>'; });
+    series.forEach(function (s, si) {
+      var c = s.c || PAL[si], pts = s.v.map(function (v, i) { return [pl + i * step, pt + (H - pt - pb) * (1 - v / max)]; });
+      var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ');
+      if (si === 0 && o.area !== false) g += '<path d="' + d + ' L' + pts[pts.length - 1][0] + ' ' + (H - pb) + ' L' + pl + ' ' + (H - pb) + ' Z" fill="' + c + '" opacity=".08"/>';
+      g += '<path d="' + d + '" fill="none" stroke="' + c + '" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+      pts.forEach(function (p, i) { g += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="3.5" fill="#fff" stroke="' + c + '" stroke-width="2"><title>' + K.esc(s.n || '') + ' ' + K.esc(labels[i]) + ': ' + (o.fmt ? o.fmt(s.v[i]) : K.num(s.v[i])) + '</title></circle>'; });
+    });
+    var leg = series.length > 1 ? '<div class="row" style="gap:14px;font-size:12px;margin-top:6px">' + series.map(function (s, si) { return '<span class="row" style="gap:6px"><i style="width:10px;height:10px;border-radius:3px;background:' + (s.c || PAL[si]) + '"></i>' + K.esc(s.n) + '</span>'; }).join('') + '</div>' : '';
+    return '<div class="chart"><svg viewBox="0 0 ' + W + ' ' + H + '" role="img">' + g + '</svg>' + leg + '</div>';
+  };
+  K.donut = function (segs, o) {
+    o = o || {}; var tot = K.sum(segs, function (s) { return s.v; }) || 1, R = 60, r = 42, a0 = -Math.PI / 2, g = '';
+    segs.forEach(function (s, i) {
+      var a1 = a0 + 2 * Math.PI * s.v / tot, large = a1 - a0 > Math.PI ? 1 : 0, c = s.c || PAL[i % PAL.length];
+      if (s.v >= tot) { g += '<circle cx="70" cy="70" r="' + ((R + r) / 2) + '" fill="none" stroke="' + c + '" stroke-width="' + (R - r) + '"/>'; }
+      else if (s.v > 0) g += '<path d="M' + (70 + R * Math.cos(a0)) + ' ' + (70 + R * Math.sin(a0)) + ' A' + R + ' ' + R + ' 0 ' + large + ' 1 ' + (70 + R * Math.cos(a1)) + ' ' + (70 + R * Math.sin(a1)) + ' L' + (70 + r * Math.cos(a1)) + ' ' + (70 + r * Math.sin(a1)) + ' A' + r + ' ' + r + ' 0 ' + large + ' 0 ' + (70 + r * Math.cos(a0)) + ' ' + (70 + r * Math.sin(a0)) + ' Z" fill="' + c + '"><title>' + K.esc(s.l) + ': ' + (o.fmt ? o.fmt(s.v) : K.num(s.v)) + '</title></path>';
+      a0 = a1;
+    });
+    g += '<text x="70" y="68" text-anchor="middle" style="font-size:18px;font-weight:700;fill:var(--ink)">' + K.esc(o.center || K.num(tot)) + '</text><text x="70" y="86" text-anchor="middle">' + K.esc(o.centerLabel || 'Total') + '</text>';
+    var leg = '<div class="legend">' + segs.map(function (s, i) { return '<span><i style="background:' + (s.c || PAL[i % PAL.length]) + '"></i>' + K.esc(s.l) + '<b>' + (o.fmt ? o.fmt(s.v) : K.num(s.v)) + '</b></span>'; }).join('') + '</div>';
+    return '<div class="donut-wrap"><div class="chart"><svg viewBox="0 0 140 140" role="img">' + g + '</svg></div>' + leg + '</div>';
+  };
+  function niceMax(m) { if (m <= 0) return 1; var p = Math.pow(10, Math.floor(Math.log10(m))), f = m / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 4 ? 4 : f <= 6 ? 6 : f <= 8 ? 8 : 10) * p; }
+
+  /* ---------- kanban ---------- */
+  // cols:[{id,label}], items, o:{col:item=>colId, card:item=>html, onMove:(item,colId)=>{}, onOpen:item=>{}}
+  K.board = function (el, cols, items, o) {
+    el.innerHTML = '<div class="board">' + cols.map(function (c) {
+      var its = items.filter(function (it) { return o.col(it) === c.id; });
+      return '<div class="col"><div class="col-h"><span>' + K.esc(c.label) + '</span><span class="n">' + its.length + '</span></div><div class="col-b" data-col="' + c.id + '">' +
+        its.map(function (it) { return '<div class="kc" draggable="true" data-id="' + it.id + '">' + o.card(it) + '</div>'; }).join('') + '</div></div>';
+    }).join('') + '</div>';
+    var dragId = null;
+    el.querySelectorAll('.kc').forEach(function (c) {
+      c.addEventListener('dragstart', function (e) { dragId = c.dataset.id; e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', dragId); } catch (x) {} });
+      c.addEventListener('click', function () { var it = items.filter(function (i) { return i.id === c.dataset.id; })[0]; if (it && o.onOpen) o.onOpen(it); });
+    });
+    el.querySelectorAll('.col-b').forEach(function (b) {
+      b.addEventListener('dragover', function (e) { e.preventDefault(); b.classList.add('over'); });
+      b.addEventListener('dragleave', function () { b.classList.remove('over'); });
+      b.addEventListener('drop', function (e) {
+        e.preventDefault(); b.classList.remove('over');
+        var it = items.filter(function (i) { return i.id === dragId; })[0];
+        if (it && o.col(it) !== b.dataset.col) o.onMove(it, b.dataset.col);
+      });
+    });
+  };
+
+  /* ---------- shell + router ---------- */
+  K.state = {};
+  K.go = function (id) { if (location.hash === '#/' + id) K.route(); else location.hash = '#/' + id; };
+  K.route = function () {
+    var id = (location.hash.replace(/^#\/?/, '') || K.APP.nav[0].id).split('/')[0];
+    var nv = K.APP.nav.filter(function (n) { return n.id === id; })[0] || K.APP.nav[0];
+    document.querySelectorAll('.nav a').forEach(function (a) { a.classList.toggle('active', a.dataset.id === nv.id); });
+    document.getElementById('topTitle').textContent = nv.label;
+    var c = document.getElementById('content'); c.innerHTML = '';
+    K.APP.views[nv.id](c);
+    document.querySelector('.side').classList.remove('open');
+    if (!drawer.classList.contains('open') && !modal.classList.contains('open')) scrim.classList.remove('open');
+    K.refreshCounts();
+    window.scrollTo(0, 0);
+  };
+  K.refreshCounts = function () {
+    K.APP.nav.forEach(function (n) {
+      var el = document.querySelector('.nav a[data-id="' + n.id + '"] .count');
+      if (el && n.count) { var v = n.count(); el.textContent = v; el.style.display = v ? '' : 'none'; }
+    });
+  };
+  K.start = function (APP) {
+    K.APP = APP;
+    document.documentElement.style.setProperty('--accent', APP.accent);
+    if (APP.accent2) document.documentElement.style.setProperty('--accent-2', APP.accent2);
+    document.documentElement.style.setProperty('--accent-soft', APP.accentSoft || 'rgba(47,111,237,.1)');
+    K.db = K.load();
+    if (APP.roles) K.state.role = APP.roles[0].v;
+    var inquire = PORTFOLIO + '?inquire=' + encodeURIComponent(APP.name);
+    var groups = {}, navHtml = '';
+    APP.nav.forEach(function (n) { var g = n.group || ''; (groups[g] = groups[g] || []).push(n); });
+    Object.keys(groups).forEach(function (g) {
+      if (g) navHtml += '<div class="nav-label">' + K.esc(g) + '</div>';
+      navHtml += groups[g].map(function (n) { return '<a href="#/' + n.id + '" data-id="' + n.id + '"><i class="ti ' + n.icon + '"></i>' + K.esc(n.label) + (n.count ? '<span class="count"></span>' : '') + '</a>'; }).join('');
+    });
+    document.body.innerHTML =
+      '<div class="app"><aside class="side"><div class="brand"><span class="brand-ico"><i class="ti ' + APP.icon + '"></i></span><div><b>' + K.esc(APP.name) + '</b><small>' + K.esc(APP.tagline) + '</small></div></div>' +
+      '<nav class="nav" aria-label="Main">' + navHtml + '</nav>' +
+      '<div class="side-foot"><div class="role">' + '<span class="avatar" id="meAv"></span><div style="min-width:0;flex:1"><b id="meName"></b><small id="meRole"></small>' +
+      (APP.roles ? '<select id="roleSel" aria-label="Switch demo role">' + APP.roles.map(function (r) { return '<option value="' + r.v + '">View as: ' + K.esc(r.l) + '</option>'; }).join('') + '</select>' : '') + '</div></div></div></aside>' +
+      '<div class="main"><div class="demo-bar"><span class="pill">Demo</span><span class="hide-sm">Sample data only. Your changes stay in this browser.</span><span class="sp"></span><button type="button" id="resetBtn"><i class="ti ti-refresh"></i> Reset demo</button><a class="cta" href="' + inquire + '" target="_top"><i class="ti ti-sparkles"></i> Get this system</a></div>' +
+      '<header class="top"><button class="icon-btn menu-toggle" id="menuBtn" aria-label="Menu"><i class="ti ti-menu-2"></i></button><div><div class="crumb">' + K.esc(APP.name) + '</div><h1 id="topTitle"></h1></div><span class="sp"></span>' +
+      '<label class="search"><i class="ti ti-search"></i><input id="gSearch" placeholder="' + K.esc(APP.searchPh || 'Search…') + '"></label>' +
+      '<button class="icon-btn" id="bellBtn" aria-label="Notifications"><i class="ti ti-bell"></i><span class="dot"></span></button></header>' +
+      '<main class="content" id="content"></main></div></div>' +
+      '<div class="scrim" id="scrim"></div><aside class="drawer" id="drawer" aria-label="Details"></aside><div class="modal" id="modal" role="dialog" aria-modal="true"></div><div class="toasts"></div>';
+    scrim = document.getElementById('scrim'); drawer = document.getElementById('drawer'); modal = document.getElementById('modal');
+    scrim.addEventListener('click', function () { K.closeModal(); K.closeDrawer(); document.querySelector('.side').classList.remove('open'); });
+    drawer.addEventListener('click', function (e) { if (e.target.closest('[data-x]')) K.closeDrawer(); });
+    modal.addEventListener('click', function (e) { if (e.target === modal || e.target.closest('[data-mx]')) K.closeModal(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { if (modal.classList.contains('open')) K.closeModal(); else K.closeDrawer(); } });
+    document.getElementById('menuBtn').onclick = function () { document.querySelector('.side').classList.add('open'); scrim.classList.add('open'); };
+    document.getElementById('resetBtn').onclick = function () { K.modal({ title: 'Reset demo data?', body: '<p class="mt0">This restores the original sample data in this browser.</p>', foot: '<button class="btn" data-mx>Cancel</button><button class="btn primary" id="doReset">Reset</button>', mount: function (m) { m.querySelector('#doReset').onclick = function () { K.closeModal(); K.reset(); }; } }); };
+    document.getElementById('bellBtn').onclick = function () { K.drawer({ title: 'Notifications', body: (APP.notifications ? APP.notifications() : '<div class="empty">You’re all caught up.</div>') }); };
+    var gs = document.getElementById('gSearch');
+    gs.addEventListener('keydown', function (e) { if (e.key === 'Enter' && APP.onSearch) APP.onSearch(gs.value.trim()); });
+    function paintMe() {
+      var me = APP.me ? APP.me() : { name: 'Mia Briones', role: 'Admin' };
+      document.getElementById('meAv').textContent = K.initials(me.name);
+      document.getElementById('meName').textContent = me.name;
+      document.getElementById('meRole').textContent = me.role;
+    }
+    var rs = document.getElementById('roleSel');
+    if (rs) rs.onchange = function () { K.state.role = rs.value; paintMe(); K.toast('Now viewing as ' + rs.options[rs.selectedIndex].text.replace('View as: ', '')); K.route(); };
+    paintMe();
+    window.addEventListener('hashchange', K.route);
+    K.route();
+  };
+})();
+
+</script>
+<script>
+(function () {
+  var E = K.esc, P = function (n, dp) { return K.money(n, 'PHP', dp); };
+  var RATE = 0.01; // 1% per month, diminishing balance
+  var DEPTS = ['Operations', 'Finance', 'Sales', 'IT', 'HR', 'Customer care'];
+  var ME_MEMBER = 'M-001';
+
+  function amort(p, n) { return Math.round(p * RATE / (1 - Math.pow(1 + RATE, -n)) * 100) / 100; }
+  function monthsAgo(n, day) { var d = K.today(); d.setDate(1); d.setMonth(d.getMonth() - n); d.setDate(day || 15); return K.iso(d); }
+  function addMonths(s, n) { var d = K.parse(s); d.setMonth(d.getMonth() + n); return K.iso(d); }
+
+  function seed() {
+    var names = ['Ana Santos', 'Mark dela Cruz', 'Joy Reyes', 'Paolo Garcia', 'Kim Villanueva', 'Rhea Mendoza', 'Carlo Bautista', 'Liza Flores', 'Jun Navarro', 'Grace Ramos', 'Ben Aquino', 'Tess Castillo', 'Rafael Lim', 'Mae Torres'];
+    var monthly = [1500, 1000, 2000, 500, 1000, 1500, 800, 1000, 2000, 500, 1200, 1000, 1500, 700];
+    var members = [], deposits = [];
+    names.forEach(function (n, i) {
+      var id = 'M-' + String(i + 1).padStart(3, '0'), joinedAgo = i < 10 ? 14 : 14 - (i - 8) * 2;
+      members.push({ id: id, name: n, dept: DEPTS[i % DEPTS.length], joined: monthsAgo(joinedAgo, 1), status: 'Active', email: n.toLowerCase().replace(/ /g, '.') + '@company.ph', monthly: monthly[i] });
+      for (var m = Math.min(joinedAgo, 12); m >= 0; m--) {
+        deposits.push({ id: K.uid('d'), member: id, date: monthsAgo(m, m === 0 ? Math.min(15, new Date().getDate()) : 15), amount: monthly[i], type: 'Share capital', note: 'Payroll deduction' });
+        if (m > 0 && (i + m) % 4 === 0) deposits.push({ id: K.uid('d'), member: id, date: monthsAgo(m, 28), amount: 1000 + (i % 3) * 500, type: 'Savings', note: 'Voluntary savings' });
+      }
+    });
+    var loans = [];
+    function loan(mi, principal, term, startAgo, status, purpose) {
+      var l = { id: 'LN-' + (1001 + loans.length), member: members[mi].id, principal: principal, term: term, start: monthsAgo(startAgo, 5), purpose: purpose, status: status, applied: monthsAgo(startAgo, 1), payments: [] };
+      if (status === 'Active' || status === 'Paid') {
+        var bal = principal, pay = amort(principal, term), paidN = status === 'Paid' ? term : Math.min(startAgo, term - 1);
+        for (var k = 1; k <= paidN; k++) { var it = Math.round(bal * RATE * 100) / 100, pr = Math.min(bal, Math.round((pay - it) * 100) / 100); bal = Math.round((bal - pr) * 100) / 100; l.payments.push({ date: addMonths(l.start, k), amount: Math.round((pr + it) * 100) / 100, principal: pr, interest: it }); }
+      }
+      loans.push(l);
+    }
+    loan(1, 20000, 12, 7, 'Active', 'Home repair'); loan(3, 10000, 6, 4, 'Active', 'Tuition'); loan(5, 30000, 12, 10, 'Active', 'Medical'); loan(8, 15000, 6, 9, 'Paid', 'Appliance');
+    loan(10, 25000, 12, 2, 'Active', 'Business capital'); loan(0, 12000, 6, 0, 'Pending', 'Emergency'); loan(12, 8000, 6, 0, 'Pending', 'Travel'); loan(6, 18000, 12, 5, 'Active', 'Motorcycle');
+    loans[5].applied = K.day(-2); loans[6].applied = K.day(-1);
+    return { members: members, deposits: deposits, loans: loans, dividends: [] };
+  }
+
+  function isMember() { return K.state.role === 'member'; }
+  function me() { return isMember() ? { name: 'Ana Santos', role: 'Member · M-001' } : { name: 'Mia Briones', role: 'Treasurer' }; }
+  function mem(id) { return K.db.members.filter(function (m) { return m.id === id; })[0]; }
+  function members() { return isMember() ? K.db.members.filter(function (m) { return m.id === ME_MEMBER; }) : K.db.members; }
+  function deps(id) { return K.db.deposits.filter(function (d) { return !id || d.member === id; }); }
+  function loans(id) { return K.db.loans.filter(function (l) { return !id || l.member === id; }); }
+  function total(arr, type) { return K.sum(arr.filter(function (d) { return !type || d.type === type; }), function (d) { return d.amount; }); }
+  function share(id) { return total(deps(id), 'Share capital'); }
+  function savings(id) { return total(deps(id), 'Savings') + total(deps(id), 'Dividend') - total(deps(id), 'Withdrawal'); }
+  function bal(l) { return l.status === 'Active' ? Math.max(0, Math.round((l.principal - K.sum(l.payments, function (p) { return p.principal; })) * 100) / 100) : 0; }
+  function loanBal(id) { return K.sum(loans(id), bal); }
+  function interestYTD() { var y = new Date().getFullYear(); return K.sum(K.db.loans, function (l) { return K.sum(l.payments.filter(function (p) { return K.parse(p.date).getFullYear() === y; }), function (p) { return p.interest; }); }); }
+  function interestAll() { return K.sum(K.db.loans, function (l) { return K.sum(l.payments, function (p) { return p.interest; }); }); }
+  function stB(s) { return K.badge(s, { Active: 'info', Pending: 'warn', Paid: 'ok', Rejected: 'bad', Exited: '' }[s]); }
+  function nextDue(l) { return addMonths(l.start, l.payments.length + 1); }
+  function schedule(l) {
+    var rows = [], b = l.principal, pay = amort(l.principal, l.term);
+    for (var k = 1; k <= l.term; k++) { var it = Math.round(b * RATE * 100) / 100, pr = k === l.term ? b : Math.round((pay - it) * 100) / 100; b = Math.round((b - pr) * 100) / 100; rows.push({ n: k, due: addMonths(l.start || K.day(0), k), pay: Math.round((pr + it) * 100) / 100, interest: it, principal: pr, bal: Math.max(0, b), paid: k <= l.payments.length }); }
+    return rows;
+  }
+  function kpi(ic, l, v, d) { return '<div class="card kpi"><span class="lbl"><i class="ti ' + ic + '"></i>' + l + '</span><span class="val">' + v + '</span>' + d + '</div>'; }
+
+  /* ---------- member drawer ---------- */
+  function openMember(id) {
+    var m = mem(id); if (!m) return;
+    var D = deps(id).slice().sort(K.by('date', true)), L = loans(id);
+    var est = estDividend(id);
+    K.drawer({
+      kicker: E(m.id) + ' · ' + E(m.dept) + ' · Member since ' + K.dfmt(m.joined), title: E(m.name), sub: stB(m.status) + ' ' + K.badge(P(m.monthly) + '/mo deduction', ''),
+      body:
+        '<div class="kv"><div><small>Share capital</small><b>' + P(share(id)) + '</b></div><div><small>Savings & dividends</small><b>' + P(savings(id)) + '</b></div><div><small>Loan balance</small><b style="color:' + (loanBal(id) ? 'var(--bad)' : 'inherit') + '">' + P(loanBal(id), 2) + '</b></div><div><small>Est. dividend this year</small><b style="color:var(--ok)">' + P(est, 2) + '</b></div></div>' +
+        '<div><p class="sec-t">Loans</p>' + (L.length ? '<div class="list" style="border:1px solid var(--line);border-radius:10px;margin-top:8px">' + L.map(function (l) { return '<div class="li" data-loan="' + l.id + '" style="cursor:pointer"><span class="ico-sq"><i class="ti ti-cash"></i></span><div class="grow"><b>' + E(l.id) + ' · ' + P(l.principal) + '</b><small>' + E(l.purpose) + ' · ' + l.term + ' months' + (l.status === 'Active' ? ' · balance ' + P(bal(l), 2) : '') + '</small></div>' + stB(l.status) + '</div>'; }).join('') + '</div>' : '<p class="muted" style="margin:6px 0 0">No loans.</p>') + '</div>' +
+        '<div><p class="sec-t">Transactions</p><div class="tbl-wrap" style="border:1px solid var(--line);border-radius:10px;margin-top:8px"><table class="tbl"><thead><tr><th>Date</th><th>Type</th><th class="num">Amount</th></tr></thead><tbody>' + D.slice(0, 12).map(function (d) { return '<tr><td>' + K.dfmt(d.date) + '</td><td>' + E(d.type) + '<br><small class="muted">' + E(d.note || '') + '</small></td><td class="num" style="color:' + (d.type === 'Withdrawal' ? 'var(--bad)' : 'inherit') + '">' + (d.type === 'Withdrawal' ? '−' : '+') + P(d.amount, 2) + '</td></tr>'; }).join('') + '</tbody></table></div></div>',
+      foot: m.status === 'Active' ? ((isMember() ? '' : '<button class="btn danger" id="exitBtn"><i class="ti ti-door-exit"></i>Process exit</button>') + '<button class="btn" id="loanBtn"><i class="ti ti-cash"></i>' + (isMember() ? 'Apply for loan' : 'New loan') + '</button>' + (isMember() ? '' : '<button class="btn primary" id="depBtn"><i class="ti ti-plus"></i>Record deposit</button>')) : '<span class="muted">Member exited on ' + K.dfmt(m.exited) + '</span>',
+      mount: function (d) {
+        d.querySelectorAll('[data-loan]').forEach(function (x) { x.onclick = function () { openLoan(x.dataset.loan); }; });
+        var b = d.querySelector('#depBtn'); if (b) b.onclick = function () { depositModal(id); };
+        b = d.querySelector('#loanBtn'); if (b) b.onclick = function () { loanModal(id); };
+        b = d.querySelector('#exitBtn'); if (b) b.onclick = function () { exitModal(id); };
+      }
+    });
+  }
+  function estDividend(id) { var pool = interestYTD() * 0.7, tot = K.sum(K.db.members.filter(function (m) { return m.status === 'Active'; }), function (m) { return share(m.id); }); return tot ? pool * share(id) / tot : 0; }
+
+  function depositModal(id) {
+    K.modal({ title: 'Record deposit', body: K.formHTML([
+      { k: 'member', label: 'Member', type: 'select', opts: K.db.members.filter(function (m) { return m.status === 'Active'; }).map(function (m) { return { v: m.id, l: m.name + ' (' + m.id + ')' }; }), val: id, full: true },
+      { k: 'type', label: 'Type', type: 'select', opts: ['Share capital', 'Savings'] }, { k: 'amount', label: 'Amount (₱)', type: 'number', req: true, val: id ? mem(id).monthly : 1000, err: 'Enter an amount' },
+      { k: 'date', label: 'Date', type: 'date', req: true, val: K.day(0) }, { k: 'note', label: 'Reference', ph: 'OR #1234 or payroll' }]),
+      foot: '<button class="btn" data-mx>Cancel</button><button class="btn primary" id="sv">Save deposit</button>',
+      mount: function (m) { m.querySelector('#sv').onclick = function () { var v = K.readForm(m); if (!v) return; v.id = K.uid('d'); K.db.deposits.push(v); K.save(); K.closeModal(); K.toast(P(v.amount) + ' recorded for ' + mem(v.member).name); if (document.getElementById('drawer').classList.contains('open')) openMember(v.member); K.route(); }; }
+    });
+  }
+  function loanModal(id) {
+    var maxL = function (mid) { return Math.max(0, share(mid) * 3 - loanBal(mid)); };
+    K.modal({ title: isMember() ? 'Apply for a loan' : 'New loan', sub: '1% monthly interest, diminishing balance. Max loan is 3× share capital.', body: K.formHTML([
+      { k: 'member', label: 'Member', type: 'select', opts: members().filter(function (m) { return m.status === 'Active'; }).map(function (m) { return { v: m.id, l: m.name + ' (' + m.id + ')' }; }), val: id || (isMember() ? ME_MEMBER : ''), full: true },
+      { k: 'principal', label: 'Amount (₱)', type: 'number', req: true, val: 10000, err: 'Enter an amount' }, { k: 'term', label: 'Term', type: 'select', opts: [{ v: 3, l: '3 months' }, { v: 6, l: '6 months' }, { v: 12, l: '12 months' }, { v: 24, l: '24 months' }], val: 6 },
+      { k: 'purpose', label: 'Purpose', req: true, full: true, ph: 'Tuition, medical, home repair…' }]) + '<div class="kv" id="prev" style="margin-top:4px"></div>',
+      foot: '<button class="btn" data-mx>Cancel</button><button class="btn primary" id="sv">' + (isMember() ? 'Submit application' : 'Create & send for approval') + '</button>',
+      mount: function (m) {
+        function prev() { var mid = m.querySelector('[name=member]').value, p = +m.querySelector('[name=principal]').value || 0, n = +m.querySelector('[name=term]').value, a = amort(p, n), tot = a * n; m.querySelector('#prev').innerHTML = '<div><small>Monthly amortization</small><b>' + P(a, 2) + '</b></div><div><small>Total interest</small><b>' + P(tot - p, 2) + '</b></div><div><small>Total repayment</small><b>' + P(tot, 2) + '</b></div><div><small>Available to borrow</small><b style="color:' + (p > maxL(mid) ? 'var(--bad)' : 'var(--ok)') + '">' + P(maxL(mid)) + '</b></div>'; }
+        m.querySelectorAll('input,select').forEach(function (x) { x.addEventListener('input', prev); x.addEventListener('change', prev); }); prev();
+        m.querySelector('#sv').onclick = function () { var v = K.readForm(m); if (!v) return; if (v.principal > maxL(v.member)) { var f = m.querySelector('[data-k=principal]'); f.classList.add('bad'); f.querySelector('.err').textContent = 'Above this member’s limit of ' + P(maxL(v.member)); return; } var l = { id: 'LN-' + (1001 + K.db.loans.length), member: v.member, principal: v.principal, term: +v.term, start: null, purpose: v.purpose, status: 'Pending', applied: K.day(0), payments: [] }; K.db.loans.unshift(l); K.save(); K.closeModal(); K.toast('Loan application ' + l.id + ' submitted'); K.closeDrawer(); K.go('loans'); };
+      }
+    });
+  }
+  function exitModal(id) {
+    var m = mem(id), sc = share(id), sv = savings(id), div = estDividend(id), lb = loanBal(id), net = sc + sv + div - lb;
+    K.modal({ title: 'Process member exit', sub: E(m.name) + ' · ' + E(m.id), body:
+      '<table class="tbl" style="border:1px solid var(--line);border-radius:10px"><tbody><tr><td>Share capital</td><td class="num">' + P(sc, 2) + '</td></tr><tr><td>Savings & posted dividends</td><td class="num">' + P(sv, 2) + '</td></tr><tr><td>Pro-rated dividend (this year)</td><td class="num">' + P(div, 2) + '</td></tr><tr><td>Less: outstanding loan balance</td><td class="num" style="color:var(--bad)">−' + P(lb, 2) + '</td></tr><tr><td><b>Net payout</b></td><td class="num"><b style="font-size:16px">' + P(net, 2) + '</b></td></tr></tbody></table>' +
+      '<p class="muted" style="margin:0">Outstanding loans are settled from the member’s equity first. A settlement statement is generated for signature.</p>',
+      foot: '<button class="btn" data-mx>Cancel</button><button class="btn primary" id="sv">Confirm exit & release ' + P(net, 2) + '</button>',
+      mount: function (md) { md.querySelector('#sv').onclick = function () { loans(id).forEach(function (l) { if (l.status === 'Active') { var b = bal(l); l.payments.push({ date: K.day(0), amount: b, principal: b, interest: 0, note: 'Offset at exit' }); l.status = 'Paid'; } }); if (div > 0) K.db.deposits.push({ id: K.uid('d'), member: id, date: K.day(0), amount: Math.round(div * 100) / 100, type: 'Dividend', note: 'Pro-rated at exit' }); K.db.deposits.push({ id: K.uid('d'), member: id, date: K.day(0), amount: Math.round(net * 100) / 100, type: 'Withdrawal', note: 'Final settlement' }); m.status = 'Exited'; m.exited = K.day(0); K.save(); K.closeModal(); K.toast(m.name + ' exited · ' + P(net, 2) + ' released'); openMember(id); K.route(); }; }
+    });
+  }
+
+  /* ---------- loan drawer ---------- */
+  function openLoan(lid) {
+    var l = K.db.loans.filter(function (x) { return x.id === lid; })[0]; if (!l) return; var m = mem(l.member);
+    var S = schedule(l), interestTot = K.sum(S, function (r) { return r.interest; });
+    K.drawer({
+      kicker: E(l.id) + ' · applied ' + K.dfmt(l.applied), title: E(m.name) + ' · ' + P(l.principal), sub: stB(l.status) + ' ' + K.badge(l.term + ' months', '') + ' ' + K.badge(E(l.purpose), ''),
+      body:
+        '<div class="kv"><div><small>Monthly amortization</small><b>' + P(amort(l.principal, l.term), 2) + '</b></div><div><small>Balance</small><b>' + P(bal(l), 2) + '</b></div><div><small>Paid</small><b>' + l.payments.length + ' of ' + l.term + '</b><div class="bar" style="margin-top:6px"><span style="width:' + Math.round(100 * l.payments.length / l.term) + '%"></span></div></div><div><small>Total interest</small><b>' + P(interestTot, 2) + '</b></div></div>' +
+        (l.status === 'Pending' ? '<div class="kv"><div><small>Share capital</small><b>' + P(share(l.member)) + '</b></div><div><small>Limit (3×) after other loans</small><b>' + P(Math.max(0, share(l.member) * 3 - loanBal(l.member))) + '</b></div></div>' : '') +
+        '<div><p class="sec-t">Amortization schedule</p><div class="tbl-wrap" style="border:1px solid var(--line);border-radius:10px;margin-top:8px"><table class="tbl"><thead><tr><th>#</th><th>Due</th><th class="num">Payment</th><th class="num">Interest</th><th class="num">Principal</th><th class="num">Balance</th><th></th></tr></thead><tbody>' +
+        S.map(function (r) { return '<tr' + (r.paid ? ' style="color:var(--sub)"' : '') + '><td>' + r.n + '</td><td class="nowrap">' + (l.start ? K.dshort(r.due) : '—') + '</td><td class="num">' + P(r.pay, 2) + '</td><td class="num">' + P(r.interest, 2) + '</td><td class="num">' + P(r.principal, 2) + '</td><td class="num">' + P(r.bal, 2) + '</td><td>' + (r.paid ? K.badge('Paid', 'ok') : '') + '</td></tr>'; }).join('') + '</tbody></table></div></div>',
+      foot: isMember() ? '' : (l.status === 'Pending' ? '<button class="btn danger" id="rej">Reject</button><button class="btn primary" id="apr"><i class="ti ti-check"></i>Approve & release</button>' : l.status === 'Active' ? '<button class="btn primary" id="pay"><i class="ti ti-receipt"></i>Record payment of ' + P(S[l.payments.length].pay, 2) + '</button>' : ''),
+      mount: function (d) {
+        var b = d.querySelector('#apr'); if (b) b.onclick = function () { l.status = 'Active'; l.start = K.day(0); K.save(); K.toast(l.id + ' approved · ' + P(l.principal) + ' released'); openLoan(l.id); K.route(); };
+        b = d.querySelector('#rej'); if (b) b.onclick = function () { l.status = 'Rejected'; K.save(); K.toast(l.id + ' rejected'); openLoan(l.id); K.route(); };
+        b = d.querySelector('#pay'); if (b) b.onclick = function () { var r = S[l.payments.length]; l.payments.push({ date: K.day(0), amount: r.pay, principal: r.principal, interest: r.interest }); if (l.payments.length >= l.term) l.status = 'Paid'; K.save(); K.toast('Payment recorded · balance ' + P(bal(l), 2)); openLoan(l.id); K.route(); };
+      }
+    });
+  }
+
+  /* ---------- views ---------- */
+  function dashboard(el) {
+    if (isMember()) return myAccount(el);
+    var A = K.db.members.filter(function (m) { return m.status === 'Active'; });
+    var cap = total(K.db.deposits, 'Share capital'), sav = savings(), out = K.sum(K.db.loans, bal), intr = interestAll();
+    var cash = cap + sav + intr - out - K.sum(K.db.loans.filter(function (l) { return l.status === 'Paid'; }), function () { return 0; });
+    var months = [], contrib = [];
+    for (var i = 11; i >= 0; i--) { var d = K.today(); d.setDate(1); d.setMonth(d.getMonth() - i); var y = d.getFullYear(), mo = d.getMonth(); months.push(d.toLocaleDateString('en-US', { month: 'short' })); contrib.push(K.sum(K.db.deposits.filter(function (x) { var t = K.parse(x.date); return t.getFullYear() === y && t.getMonth() === mo && (x.type === 'Share capital' || x.type === 'Savings'); }), function (x) { return x.amount; })); }
+    var pend = K.db.loans.filter(function (l) { return l.status === 'Pending'; }), due = K.db.loans.filter(function (l) { return l.status === 'Active'; }).sort(function (a, b) { return nextDue(a) < nextDue(b) ? -1 : 1; });
+    var recent = K.db.deposits.slice().sort(K.by('date', true)).slice(0, 6);
+    el.innerHTML = '<div class="page-head"><div><h2>Fund overview</h2><p>' + A.length + ' active members · interest at 1% per month, diminishing balance</p></div><div class="actions"><button class="btn" id="bulk"><i class="ti ti-users"></i>Payroll deductions</button><button class="btn primary" id="dep"><i class="ti ti-plus"></i>Record deposit</button></div></div>' +
+      '<div class="grid g-4">' + kpi('ti-building-bank', 'Total fund', K.compact(cap + sav + intr, 'PHP'), '<span class="delta up">▲ ' + P(contrib[11]) + ' this month</span>') + kpi('ti-users', 'Active members', A.length, '<span class="delta">' + K.db.members.length + ' all time</span>') + kpi('ti-cash', 'Loans outstanding', K.compact(out, 'PHP'), '<span class="delta">' + due.length + ' active · ' + pend.length + ' pending</span>') + kpi('ti-trending-up', 'Interest earned (YTD)', P(interestYTD()), '<span class="delta up">Goes to member dividends</span>') + '</div>' +
+      '<div class="grid g-21"><div class="card"><div class="card-h"><h3>Monthly contributions</h3><small>Share capital + savings</small></div><div class="card-b">' + K.bars(months.map(function (m, i) { return { l: m, v: contrib[i] }; }), { w: 760, fmt: function (v) { return K.compact(v, 'PHP'); } }) + '</div></div>' +
+      '<div class="card"><div class="card-h"><h3>Where the money is</h3></div><div class="card-b">' + K.donut([{ l: 'Cash on hand', v: Math.max(0, cash), c: '#15803D' }, { l: 'Loans to members', v: out, c: '#F59E0B' }], { center: K.compact(cash + out, 'PHP'), centerLabel: 'Total', fmt: function (v) { return K.compact(v, 'PHP'); } }) + '</div></div></div>' +
+      '<div class="grid g-2"><div class="card"><div class="card-h"><h3>Loan approvals & payments due</h3><a class="btn sm ghost" href="#/loans">All loans</a></div><div class="list">' +
+      pend.map(function (l) { return '<div class="li" data-loan="' + l.id + '" style="cursor:pointer"><span class="ico-sq" style="background:var(--warn-bg);color:var(--warn)"><i class="ti ti-file-dollar"></i></span><div class="grow"><b>' + E(mem(l.member).name) + ' · ' + P(l.principal) + '</b><small>' + E(l.purpose) + ' · applied ' + K.rel(l.applied).toLowerCase() + '</small></div>' + K.badge('Needs approval', 'warn') + '</div>'; }).join('') +
+      due.slice(0, 4).map(function (l) { return '<div class="li" data-loan="' + l.id + '" style="cursor:pointer"><span class="ico-sq"><i class="ti ti-calendar-dollar"></i></span><div class="grow"><b>' + E(mem(l.member).name) + ' · ' + P(amort(l.principal, l.term), 2) + '</b><small>' + E(l.id) + ' · payment ' + (l.payments.length + 1) + ' of ' + l.term + '</small></div>' + K.badge(K.dshort(nextDue(l)), K.diff(nextDue(l)) < 0 ? 'bad' : '') + '</div>'; }).join('') + '</div></div>' +
+      '<div class="card"><div class="card-h"><h3>Recent transactions</h3><a class="btn sm ghost" href="#/deposits">All</a></div><div class="list">' + recent.map(function (d) { return '<div class="li" data-m="' + d.member + '" style="cursor:pointer"><span class="ico-sq" style="background:var(--ok-bg);color:var(--ok)"><i class="ti ti-arrow-down-left"></i></span><div class="grow"><b>' + E(mem(d.member).name) + '</b><small>' + E(d.type) + ' · ' + K.dfmt(d.date) + '</small></div><b>+' + P(d.amount) + '</b></div>'; }).join('') + '</div></div></div>';
+    el.querySelector('#dep').onclick = function () { depositModal(); };
+    el.querySelector('#bulk').onclick = bulkModal;
+    wire(el);
+  }
+  function wire(el) { el.querySelectorAll('[data-loan]').forEach(function (x) { x.onclick = function () { openLoan(x.dataset.loan); }; }); el.querySelectorAll('[data-m]').forEach(function (x) { x.onclick = function () { openMember(x.dataset.m); }; }); }
+  function bulkModal() {
+    var A = K.db.members.filter(function (m) { return m.status === 'Active'; }), tot = K.sum(A, function (m) { return m.monthly; });
+    K.modal({ title: 'Post payroll deductions', sub: 'Records this month’s share capital for every active member in one step.', body: '<div class="kv"><div><small>Members</small><b>' + A.length + '</b></div><div><small>Total to post</small><b>' + P(tot) + '</b></div></div><div class="tbl-wrap" style="border:1px solid var(--line);border-radius:10px;max-height:260px;overflow:auto"><table class="tbl"><tbody>' + A.map(function (m) { return '<tr><td>' + E(m.name) + '</td><td class="num">' + P(m.monthly) + '</td></tr>'; }).join('') + '</tbody></table></div>',
+      foot: '<button class="btn" data-mx>Cancel</button><button class="btn primary" id="sv">Post ' + P(tot) + '</button>',
+      mount: function (m) { m.querySelector('#sv').onclick = function () { A.forEach(function (x) { K.db.deposits.push({ id: K.uid('d'), member: x.id, date: K.day(0), amount: x.monthly, type: 'Share capital', note: 'Payroll deduction' }); }); K.save(); K.closeModal(); K.toast(A.length + ' deductions posted · ' + P(tot)); K.route(); }; } });
+  }
+
+  function myAccount(el) {
+    var id = ME_MEMBER, m = mem(id), L = loans(id), est = estDividend(id);
+    var months = [], bal12 = [], run = 0, D = deps(id).slice().sort(K.by('date'));
+    for (var i = 11; i >= 0; i--) { var d = K.today(); d.setDate(1); d.setMonth(d.getMonth() - i + 1); months.push(new Date(d.getFullYear(), d.getMonth() - 1, 1).toLocaleDateString('en-US', { month: 'short' })); bal12.push(K.sum(D.filter(function (x) { return K.parse(x.date) < d && x.type !== 'Withdrawal'; }), function (x) { return x.amount; })); }
+    el.innerHTML = '<div class="page-head"><div><h2>Hi ' + E(m.name.split(' ')[0]) + ', here’s your account</h2><p>Member ' + E(m.id) + ' · ' + P(m.monthly) + ' monthly payroll deduction</p></div><div class="actions"><button class="btn primary" id="ap"><i class="ti ti-cash"></i>Apply for a loan</button></div></div>' +
+      '<div class="grid g-4">' + kpi('ti-coins', 'My share capital', P(share(id)), '<span class="delta up">Earns dividends</span>') + kpi('ti-pig-money', 'My savings', P(savings(id)), '<span class="delta">Withdrawable</span>') + kpi('ti-cash', 'My loan balance', P(loanBal(id), 2), '<span class="delta">' + L.filter(function (l) { return l.status === 'Active'; }).length + ' active loan(s)</span>') + kpi('ti-gift', 'Est. dividend', P(est, 2), '<span class="delta up">Based on interest earned so far</span>') + '</div>' +
+      '<div class="grid g-21"><div class="card"><div class="card-h"><h3>My equity growth</h3><small>Last 12 months</small></div><div class="card-b">' + K.line(months, [{ n: 'Equity', v: bal12 }], { w: 760, fmt: function (v) { return K.compact(v, 'PHP'); } }) + '</div></div>' +
+      '<div class="card"><div class="card-h"><h3>My loans</h3></div><div class="list">' + (L.map(function (l) { return '<div class="li" data-loan="' + l.id + '" style="cursor:pointer"><span class="ico-sq"><i class="ti ti-cash"></i></span><div class="grow"><b>' + P(l.principal) + ' · ' + E(l.purpose) + '</b><small>' + E(l.id) + ' · ' + l.term + ' months</small></div>' + stB(l.status) + '</div>'; }).join('') || '<div class="empty">No loans yet.</div>') + '</div></div></div>' +
+      '<div class="card"><div class="card-h"><h3>My transactions</h3><button class="btn sm" data-m="' + id + '">Full statement</button></div><div class="list">' + D.slice().reverse().slice(0, 6).map(function (d) { return '<div class="li"><span class="ico-sq" style="background:var(--ok-bg);color:var(--ok)"><i class="ti ti-arrow-down-left"></i></span><div class="grow"><b>' + E(d.type) + '</b><small>' + K.dfmt(d.date) + ' · ' + E(d.note || '') + '</small></div><b>+' + P(d.amount) + '</b></div>'; }).join('') + '</div></div>';
+    el.querySelector('#ap').onclick = function () { loanModal(id); };
+    wire(el);
+  }
+
+  var F = { q: '', st: 'Active' };
+  function membersView(el) {
+    if (isMember()) { openMember(ME_MEMBER); return myAccount(el); }
+    el.innerHTML = '<div class="page-head"><div><h2>Members</h2><p>Balances, loans and statements for every member.</p></div><div class="actions"><button class="btn primary" id="add"><i class="ti ti-user-plus"></i>Add member</button></div></div>' +
+      '<div class="card"><div class="toolbar"><label class="search"><i class="ti ti-search"></i><input id="q" placeholder="Search name or ID" value="' + E(F.q) + '"></label><select class="sel" id="st"><option value="Active"' + (F.st === 'Active' ? ' selected' : '') + '>Active</option><option value="Exited"' + (F.st === 'Exited' ? ' selected' : '') + '>Exited</option><option value="all"' + (F.st === 'all' ? ' selected' : '') + '>All members</option></select><span class="muted" id="cnt" style="margin-left:auto"></span></div><div class="tbl-wrap" id="tw"></div></div>';
+    function draw() {
+      var rows = K.db.members.filter(function (m) { return (F.st === 'all' || m.status === F.st) && (!F.q || (m.name + ' ' + m.id).toLowerCase().indexOf(F.q.toLowerCase()) > -1); });
+      el.querySelector('#cnt').textContent = rows.length + ' members';
+      el.querySelector('#tw').innerHTML = '<table class="tbl"><thead><tr><th>Member</th><th>Department</th><th class="num">Monthly</th><th class="num">Share capital</th><th class="num">Savings</th><th class="num">Loan balance</th><th>Status</th></tr></thead><tbody>' + rows.map(function (m) { var lb = loanBal(m.id); return '<tr class="click" data-m="' + m.id + '"><td><div class="cell-main">' + K.avatar(m.name, '#15803D') + '<div><b>' + E(m.name) + '</b><small>' + E(m.id) + ' · since ' + K.dfmt(m.joined) + '</small></div></div></td><td>' + E(m.dept) + '</td><td class="num">' + P(m.monthly) + '</td><td class="num">' + P(share(m.id)) + '</td><td class="num">' + P(savings(m.id)) + '</td><td class="num"' + (lb ? ' style="color:var(--bad)"' : '') + '>' + (lb ? P(lb, 2) : '—') + '</td><td>' + stB(m.status) + '</td></tr>'; }).join('') + '</tbody></table>';
+      wire(el);
+    }
+    el.querySelector('#q').oninput = function (e) { F.q = e.target.value; draw(); };
+    el.querySelector('#st').onchange = function (e) { F.st = e.target.value; draw(); };
+    el.querySelector('#add').onclick = function () {
+      K.modal({ title: 'Add member', body: K.formHTML([{ k: 'name', label: 'Full name', req: true, ph: 'Juan dela Cruz' }, { k: 'dept', label: 'Department', type: 'select', opts: DEPTS }, { k: 'email', label: 'Email', type: 'email', req: true, ph: 'juan@company.ph', err: 'Enter a valid email' }, { k: 'monthly', label: 'Monthly deduction (₱)', type: 'number', req: true, val: 1000, err: 'Enter an amount' }, { k: 'initial', label: 'Initial share capital (₱)', type: 'number', val: 1000 }]),
+        foot: '<button class="btn" data-mx>Cancel</button><button class="btn primary" id="sv">Add member</button>',
+        mount: function (m) { m.querySelector('#sv').onclick = function () { var v = K.readForm(m); if (!v) return; var id = 'M-' + String(K.db.members.length + 1).padStart(3, '0'); K.db.members.push({ id: id, name: v.name, dept: v.dept, joined: K.day(0), status: 'Active', email: v.email, monthly: v.monthly }); if (v.initial > 0) K.db.deposits.push({ id: K.uid('d'), member: id, date: K.day(0), amount: v.initial, type: 'Share capital', note: 'Membership fee' }); K.save(); K.closeModal(); K.toast(v.name + ' added as ' + id); K.route(); openMember(id); }; } });
+    };
+    draw();
+  }
+
+  var DF = { type: 'all', m: 'all' };
+  function depositsView(el) {
+    var mine = isMember() ? ME_MEMBER : null;
+    var monthsOpt = []; for (var i = 0; i < 12; i++) { var d = K.today(); d.setDate(1); d.setMonth(d.getMonth() - i); monthsOpt.push([d.getFullYear() + '-' + d.getMonth(), d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })]); }
+    el.innerHTML = '<div class="page-head"><div><h2>' + (mine ? 'My transactions' : 'Deposits & transactions') + '</h2><p>Share capital, savings, dividends and withdrawals.</p></div>' + (mine ? '' : '<div class="actions"><button class="btn" id="bulk"><i class="ti ti-users"></i>Payroll deductions</button><button class="btn primary" id="dep"><i class="ti ti-plus"></i>Record deposit</button></div>') + '</div>' +
+      '<div class="card"><div class="toolbar"><select class="sel" id="ty"><option value="all">All types</option>' + ['Share capital', 'Savings', 'Dividend', 'Withdrawal'].map(function (t) { return '<option' + (DF.type === t ? ' selected' : '') + '>' + t + '</option>'; }).join('') + '</select><select class="sel" id="mo"><option value="all">All months</option>' + monthsOpt.map(function (o) { return '<option value="' + o[0] + '"' + (DF.m === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select><span class="muted" id="cnt" style="margin-left:auto"></span></div><div class="tbl-wrap" id="tw"></div></div>';
+    function draw() {
+      var rows = deps(mine).filter(function (d) { if (DF.type !== 'all' && d.type !== DF.type) return false; if (DF.m !== 'all') { var t = K.parse(d.date); if (t.getFullYear() + '-' + t.getMonth() !== DF.m) return false; } return true; }).sort(K.by('date', true));
+      var tot = K.sum(rows, function (d) { return d.type === 'Withdrawal' ? -d.amount : d.amount; });
+      el.querySelector('#cnt').innerHTML = rows.length + ' transactions · net <b>' + P(tot, 2) + '</b>';
+      el.querySelector('#tw').innerHTML = '<table class="tbl"><thead><tr><th>Date</th><th>Member</th><th>Type</th><th>Reference</th><th class="num">Amount</th></tr></thead><tbody>' + rows.slice(0, 80).map(function (d) { var w = d.type === 'Withdrawal'; return '<tr class="click" data-m="' + d.member + '"><td class="nowrap">' + K.dfmt(d.date) + '</td><td>' + E(mem(d.member).name) + '</td><td>' + K.badge(d.type, d.type === 'Share capital' ? 'acc' : d.type === 'Dividend' ? 'ok' : w ? 'bad' : 'info') + '</td><td class="muted">' + E(d.note || '') + '</td><td class="num" style="font-weight:600;color:' + (w ? 'var(--bad)' : 'var(--ok)') + '">' + (w ? '−' : '+') + P(d.amount, 2) + '</td></tr>'; }).join('') + '</tbody></table>';
+      wire(el);
+    }
+    el.querySelector('#ty').onchange = function (e) { DF.type = e.target.value; draw(); };
+    el.querySelector('#mo').onchange = function (e) { DF.m = e.target.value; draw(); };
+    var b = el.querySelector('#dep'); if (b) b.onclick = function () { depositModal(); };
+    b = el.querySelector('#bulk'); if (b) b.onclick = bulkModal;
+    draw();
+  }
+
+  var LT = 'Active';
+  function loansView(el) {
+    var L = isMember() ? loans(ME_MEMBER) : K.db.loans;
+    var tabs = ['Pending', 'Active', 'Paid', 'Rejected'];
+    var rows = L.filter(function (l) { return l.status === LT; });
+    el.innerHTML = '<div class="page-head"><div><h2>' + (isMember() ? 'My loans' : 'Loans') + '</h2><p>1% monthly interest on the diminishing balance. Members can borrow up to 3× their share capital.</p></div><div class="actions"><button class="btn primary" id="nl"><i class="ti ti-plus"></i>' + (isMember() ? 'Apply for a loan' : 'New loan') + '</button></div></div>' +
+      (isMember() ? '' : '<div class="grid g-4">' + kpi('ti-cash', 'Outstanding', P(K.sum(L, bal)), '<span class="delta">' + L.filter(function (l) { return l.status === 'Active'; }).length + ' active loans</span>') + kpi('ti-hourglass', 'Awaiting approval', P(K.sum(L.filter(function (l) { return l.status === 'Pending'; }), function (l) { return l.principal; })), '<span class="delta">' + L.filter(function (l) { return l.status === 'Pending'; }).length + ' applications</span>') + kpi('ti-trending-up', 'Interest collected', P(interestAll()), '<span class="delta up">All time</span>') + kpi('ti-circle-check', 'Fully paid', L.filter(function (l) { return l.status === 'Paid'; }).length, '<span class="delta">0 defaults</span>') + '</div>') +
+      '<div class="card"><div class="tabs">' + tabs.map(function (t) { return '<button class="tab' + (LT === t ? ' active' : '') + '" data-t="' + t + '">' + t + ' <span class="muted">' + L.filter(function (l) { return l.status === t; }).length + '</span></button>'; }).join('') + '</div>' +
+      (rows.length ? '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Loan</th><th>Member</th><th>Purpose</th><th class="num">Amount</th><th class="num">Monthly</th><th style="min-width:140px">Progress</th><th class="num">Balance</th><th>' + (LT === 'Active' ? 'Next due' : 'Applied') + '</th></tr></thead><tbody>' + rows.map(function (l) { return '<tr class="click" data-loan="' + l.id + '"><td><b>' + E(l.id) + '</b></td><td>' + E(mem(l.member).name) + '</td><td>' + E(l.purpose) + '</td><td class="num">' + P(l.principal) + '</td><td class="num">' + P(amort(l.principal, l.term), 2) + '</td><td><div class="bar"><span style="width:' + Math.round(100 * l.payments.length / l.term) + '%"></span></div><small class="muted">' + l.payments.length + ' of ' + l.term + '</small></td><td class="num">' + P(bal(l), 2) + '</td><td class="nowrap">' + (LT === 'Active' ? K.dshort(nextDue(l)) : K.dshort(l.applied)) + '</td></tr>'; }).join('') + '</tbody></table></div>' : '<div class="empty">No ' + LT.toLowerCase() + ' loans.</div>') + '</div>';
+    el.querySelectorAll('[data-t]').forEach(function (b) { b.onclick = function () { LT = b.dataset.t; K.route(); }; });
+    el.querySelector('#nl').onclick = function () { loanModal(isMember() ? ME_MEMBER : null); };
+    wire(el);
+  }
+
+  var DIV = { pct: 70 };
+  function dividendsView(el) {
+    var A = K.db.members.filter(function (m) { return m.status === 'Active'; }), tot = K.sum(A, function (m) { return share(m.id); });
+    var ytd = interestYTD(), pool = ytd * DIV.pct / 100, rate = tot ? pool / tot : 0, year = new Date().getFullYear();
+    var posted = K.db.dividends.indexOf(year) > -1;
+    var list = isMember() ? A.filter(function (m) { return m.id === ME_MEMBER; }) : A;
+    el.innerHTML = '<div class="page-head"><div><h2>Dividends</h2><p>Interest earned from member loans is shared back to members based on their share capital.</p></div></div>' +
+      '<div class="grid g-4">' + kpi('ti-trending-up', 'Interest earned ' + year, P(ytd, 2), '<span class="delta">From loan payments</span>') + kpi('ti-percentage', 'Share to distribute', DIV.pct + '%', '<span class="delta">Rest kept as reserve fund</span>') + kpi('ti-gift', 'Dividend pool', P(pool, 2), '<span class="delta up">' + (rate * 100).toFixed(2) + '% return on share capital</span>') + kpi('ti-users', 'Eligible members', A.length, '<span class="delta">' + P(tot) + ' total share capital</span>') + '</div>' +
+      (isMember() ? '' : '<div class="card"><div class="card-b row" style="justify-content:space-between"><div class="row" style="flex:1;min-width:240px"><label for="pct"><b>Distribute</b></label><input type="range" id="pct" min="30" max="100" step="5" value="' + DIV.pct + '" style="flex:1;accent-color:var(--accent)"><b id="pv">' + DIV.pct + '%</b></div><button class="btn primary" id="post"' + (posted ? ' disabled' : '') + '><i class="ti ti-send"></i>' + (posted ? 'Posted for ' + year : 'Post dividends to member savings') + '</button></div></div>') +
+      '<div class="card"><div class="card-h"><h3>Allocation by member</h3><small>Dividend = share capital × ' + (rate * 100).toFixed(2) + '%</small></div><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Member</th><th class="num">Share capital</th><th>Share of fund</th><th class="num">Dividend</th></tr></thead><tbody>' +
+      list.slice().sort(function (a, b) { return share(b.id) - share(a.id); }).map(function (m) { var s = share(m.id); return '<tr class="click" data-m="' + m.id + '"><td><div class="cell-main">' + K.avatar(m.name, '#15803D') + '<b>' + E(m.name) + '</b></div></td><td class="num">' + P(s) + '</td><td><span class="health"><span class="bar"><span style="width:' + (100 * s / (tot || 1) * 4) + '%"></span></span><small>' + (100 * s / (tot || 1)).toFixed(1) + '%</small></span></td><td class="num" style="color:var(--ok);font-weight:600">' + P(s * rate, 2) + '</td></tr>'; }).join('') + '</tbody></table></div></div>';
+    var pc = el.querySelector('#pct'); if (pc) { pc.oninput = function () { el.querySelector('#pv').textContent = pc.value + '%'; }; pc.onchange = function () { DIV.pct = +pc.value; K.route(); }; }
+    var po = el.querySelector('#post'); if (po) po.onclick = function () { K.modal({ title: 'Post ' + year + ' dividends?', body: '<p class="mt0">This credits <b>' + P(pool, 2) + '</b> to ' + A.length + ' members’ savings, based on their share capital.</p>', foot: '<button class="btn" data-mx>Cancel</button><button class="btn primary" id="go">Post dividends</button>', mount: function (m) { m.querySelector('#go').onclick = function () { A.forEach(function (x) { var amt = Math.round(share(x.id) * rate * 100) / 100; if (amt > 0) K.db.deposits.push({ id: K.uid('d'), member: x.id, date: K.day(0), amount: amt, type: 'Dividend', note: year + ' dividend' }); }); K.db.dividends.push(year); K.save(); K.closeModal(); K.toast('Dividends posted to ' + A.length + ' members'); K.route(); }; } }); };
+    wire(el);
+  }
+
+  K.start({
+    key: 'coop', name: 'Co-op Fund & Lending', tagline: 'Team cooperative portal', icon: 'ti-pig-money',
+    accent: '#15803D', accent2: '#86EFAC', accentSoft: 'rgba(21,128,61,.1)', currency: 'PHP', searchPh: 'Search members…',
+    roles: [{ v: 'treasurer', l: 'Treasurer' }, { v: 'member', l: 'Member (Ana)' }],
+    me: me, seed: seed,
+    nav: [
+      { id: 'dashboard', label: 'Overview', icon: 'ti-layout-dashboard' },
+      { id: 'members', label: 'Members', icon: 'ti-users' },
+      { id: 'deposits', label: 'Deposits', icon: 'ti-arrows-exchange' },
+      { id: 'loans', label: 'Loans', icon: 'ti-cash', count: function () { return isMember() ? 0 : K.db.loans.filter(function (l) { return l.status === 'Pending'; }).length; } },
+      { id: 'dividends', label: 'Dividends', icon: 'ti-gift', group: 'Year-end' }],
+    views: { dashboard: dashboard, members: membersView, deposits: depositsView, loans: loansView, dividends: dividendsView },
+    onSearch: function (q) { F.q = q; F.st = 'all'; K.go('members'); },
+    notifications: function () {
+      var p = isMember() ? [] : K.db.loans.filter(function (l) { return l.status === 'Pending'; });
+      return '<div class="list">' + p.map(function (l) { return '<div class="li"><span class="ico-sq" style="background:var(--warn-bg);color:var(--warn)"><i class="ti ti-file-dollar"></i></span><div class="grow"><b>Loan application from ' + E(mem(l.member).name) + '</b><small>' + P(l.principal) + ' · ' + E(l.purpose) + '</small></div></div>'; }).join('') + '<div class="li"><span class="ico-sq"><i class="ti ti-calendar"></i></span><div class="grow"><b>Payroll deductions due</b><small>Post this month’s share capital on the 15th</small></div></div></div>';
+    }
+  });
+})();
+
+</script>
+</body>
+</html>
