@@ -1,0 +1,942 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SignIt – E-Signature Live Demo | MA System Solutions</title>
+<meta name="description" content="Interactive demo of SignIt: prepare documents, place signature fields, send to signers in order and sign with a drawn or typed signature. Built by Mia Marie Briones.">
+<meta name="author" content="Mia Marie Briones">
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#0F1729">
+<link rel="icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+:root{--accent:#2F6FED;--accent-ink:#fff;--accent-soft:rgba(47,111,237,.1);--ink:#0F172A;--sub:#64748B;--muted:#94A3B8;--line:#E6E8EF;--bg:#F5F6FA;--card:#fff;--side:#0F1729;--side-ink:#AEB8CB;--ok:#15803D;--ok-bg:#E7F6EC;--warn:#B45309;--warn-bg:#FEF3E2;--bad:#B91C1C;--bad-bg:#FDECEC;--info:#1D4ED8;--info-bg:#E8EFFD;--gray-bg:#EEF0F4;--r:12px;--sh:0 1px 2px rgba(15,23,42,.05),0 4px 16px rgba(15,23,42,.05)}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.5}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--accent)}
+.app{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh}
+/* sidebar */
+.side{background:var(--side);color:var(--side-ink);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;padding:18px 14px}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px 18px;color:#fff}
+.brand-ico{width:36px;height:36px;border-radius:10px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:19px;flex:none}
+.brand b{display:block;font-size:15px;line-height:1.2}.brand small{font-size:11px;color:var(--side-ink)}
+.nav{display:flex;flex-direction:column;gap:2px;margin-top:6px}
+.nav-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:#6B7890;padding:14px 10px 6px}
+.nav a{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:8px;color:var(--side-ink);text-decoration:none;font-weight:500}
+.nav a i{font-size:18px}.nav a:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav a.active{background:rgba(255,255,255,.1);color:#fff}
+.nav a.active i{color:var(--accent-2,var(--accent))}
+.nav .count{margin-left:auto;font-size:11px;background:rgba(255,255,255,.12);padding:1px 7px;border-radius:999px;color:#fff}
+.side-foot{margin-top:auto;border-top:1px solid rgba(255,255,255,.08);padding-top:14px}
+.role{display:flex;align-items:center;gap:10px;padding:8px;border-radius:10px;background:rgba(255,255,255,.05)}
+.avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:12px;background:var(--accent-soft);color:var(--accent);flex:none}
+.side .avatar{background:rgba(255,255,255,.12);color:#fff}
+.role b{display:block;color:#fff;font-size:13px;line-height:1.2}.role small{font-size:11px}
+.role select{margin-top:8px;width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff;border-radius:8px;padding:6px 8px;font-size:12px}
+.role select option{color:#000}
+/* main */
+.main{min-width:0;display:flex;flex-direction:column}
+.demo-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 24px;background:#111A2E;color:#D7DEEA;font-size:12.5px}
+.demo-bar .pill{background:#C9A227;color:#14213D;font-weight:700;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:5px}
+.demo-bar .sp{flex:1}
+.demo-bar button,.demo-bar a{background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:7px;padding:4px 10px;font-size:12px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.demo-bar a.cta{background:#C9A227;border-color:#C9A227;color:#14213D;font-weight:600}
+.top{height:64px;display:flex;align-items:center;gap:14px;padding:0 24px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.top h1{font-size:18px;margin:0;font-weight:650;letter-spacing:-.01em}
+.top .crumb{font-size:12px;color:var(--sub)}
+.top .sp{flex:1}
+.search{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:7px 11px;width:260px;color:var(--sub)}
+.search input{border:0;background:transparent;outline:none;width:100%}
+.icon-btn{width:36px;height:36px;border-radius:9px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;color:var(--sub);font-size:18px;position:relative}
+.icon-btn:hover{color:var(--ink)}
+.icon-btn .dot{position:absolute;top:7px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--bad)}
+.menu-toggle{display:none}
+.content{padding:24px;display:flex;flex-direction:column;gap:18px;max-width:1400px;width:100%}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.page-head h2{margin:0;font-size:22px;letter-spacing:-.02em;font-weight:700}
+.page-head p{margin:2px 0 0;color:var(--sub)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+/* cards */
+.grid{display:grid;gap:16px}
+.g-4{grid-template-columns:repeat(4,minmax(0,1fr))}.g-3{grid-template-columns:repeat(3,minmax(0,1fr))}.g-2{grid-template-columns:repeat(2,minmax(0,1fr))}.g-21{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);min-width:0}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.card-h h3{margin:0;font-size:14px;font-weight:650}.card-h small{color:var(--sub)}
+.card-b{padding:16px 18px}
+.kpi{padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.kpi .lbl{display:flex;align-items:center;gap:8px;color:var(--sub);font-size:12.5px;font-weight:500}
+.kpi .lbl i{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-size:16px}
+.kpi .val{font-size:26px;font-weight:700;letter-spacing:-.02em}
+.kpi .delta{font-size:12px;color:var(--sub)}.delta.up{color:var(--ok)}.delta.down{color:var(--bad)}
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:9px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-weight:550;font-size:13px;text-decoration:none;color:var(--ink);white-space:nowrap}
+.btn:hover{border-color:#CBD2DE}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.danger{color:var(--bad)}
+.btn.sm{padding:5px 10px;font-size:12px;border-radius:7px}
+.btn i{font-size:16px}
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:600;white-space:nowrap;background:var(--gray-bg);color:#475569}
+.badge.ok{background:var(--ok-bg);color:var(--ok)}.badge.warn{background:var(--warn-bg);color:var(--warn)}.badge.bad{background:var(--bad-bg);color:var(--bad)}.badge.info{background:var(--info-bg);color:var(--info)}.badge.acc{background:var(--accent-soft);color:var(--accent)}
+.badge .d{width:6px;height:6px;border-radius:50%;background:currentColor}
+/* tables */
+.tbl-wrap{overflow-x:auto}
+table.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;font-weight:600;color:var(--sub);font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;padding:10px 14px;border-bottom:1px solid var(--line);background:#FAFBFC;white-space:nowrap}
+.tbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr.click{cursor:pointer}.tbl tbody tr.click:hover{background:#FAFBFD}
+.tbl .num{text-align:right;font-variant-numeric:tabular-nums}
+.cell-main{display:flex;align-items:center;gap:10px}.cell-main b{display:block;font-weight:600}.cell-main small{color:var(--sub)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}
+.toolbar .search{width:240px;background:var(--card)}
+select.sel,input.inp,textarea.inp{border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:var(--card);outline:none}
+select.sel:focus,input.inp:focus,textarea.inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.empty{padding:40px;text-align:center;color:var(--sub)}
+/* progress */
+.bar{height:7px;background:var(--gray-bg);border-radius:999px;overflow:hidden}.bar span{display:block;height:100%;background:var(--accent);border-radius:999px}
+.health{display:inline-flex;align-items:center;gap:8px;min-width:110px}.health .bar{flex:1;min-width:50px}
+/* lists */
+.list{display:flex;flex-direction:column}
+.li{display:flex;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--line)}.li:last-child{border-bottom:0}
+.li .grow{flex:1;min-width:0}.li b{font-weight:600}.li small{color:var(--sub);display:block}
+.ico-sq{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-size:17px;flex:none}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;padding-left:4px}
+.tl-i{display:flex;gap:12px;position:relative;padding-bottom:16px}
+.tl-i:before{content:"";position:absolute;left:14px;top:30px;bottom:0;width:2px;background:var(--line)}
+.tl-i:last-child:before{display:none}
+.tl-i .ico-sq{width:30px;height:30px;border-radius:50%;font-size:14px}
+.tl-i .grow{flex:1;min-width:0}.tl-i small{color:var(--sub)}
+.tl-i p{margin:4px 0 0;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+/* kanban */
+.board{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px;align-items:flex-start}
+.col{background:#EEF0F5;border-radius:12px;min-width:260px;width:260px;flex:none;display:flex;flex-direction:column;max-height:calc(100vh - 230px)}
+.col-h{display:flex;align-items:center;justify-content:space-between;padding:11px 12px;font-weight:650;font-size:13px}
+.col-h .n{background:#fff;border-radius:999px;padding:0 8px;font-size:11.5px;color:var(--sub)}
+.col-b{padding:0 10px 10px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;min-height:60px}
+.col-b.over{background:var(--accent-soft);border-radius:10px}
+.kc{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:grab;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+.kc:hover{border-color:#CBD2DE}.kc b{display:block;font-size:13px}.kc small{color:var(--sub)}
+.kc .meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:6px}
+/* drawer + modal */
+.scrim{position:fixed;inset:0;background:rgba(15,23,42,.42);z-index:50;opacity:0;pointer-events:none;transition:opacity .2s}
+.scrim.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--card);z-index:60;transform:translateX(100%);transition:transform .25s ease;display:flex;flex-direction:column;box-shadow:-10px 0 40px rgba(15,23,42,.15)}
+.drawer.open{transform:none}
+.dr-h{display:flex;align-items:flex-start;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line)}
+.dr-h h3{margin:0;font-size:18px}.dr-h .grow{flex:1;min-width:0}
+.dr-b{flex:1;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:16px}
+.dr-f{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.modal{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.modal .box{background:var(--card);border-radius:14px;width:min(560px,100%);max-height:90vh;overflow:auto;box-shadow:0 20px 60px rgba(15,23,42,.25);animation:pop .18s ease}
+@keyframes pop{from{transform:scale(.97);opacity:0}to{transform:none;opacity:1}}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.f{display:flex;flex-direction:column;gap:5px}.f.full{grid-column:1/-1}
+.f label{font-size:12px;font-weight:600;color:#334155}
+.f .inp,.f .sel{width:100%}
+.f .err{color:var(--bad);font-size:11.5px;display:none}.f.bad .err{display:block}.f.bad .inp{border-color:var(--bad)}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.kv div{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+.kv small{display:block;color:var(--sub);font-size:11.5px}.kv b{font-weight:600}
+.sec-t{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--sub);font-weight:700;margin:0}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);padding:0 18px}
+.tab{padding:11px 12px;border:0;background:none;cursor:pointer;color:var(--sub);font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab.active{color:var(--ink);border-bottom-color:var(--accent)}
+/* stepper */
+.steps{display:flex;gap:0;overflow-x:auto;padding:4px 0 8px}
+.step{flex:1;min-width:84px;text-align:center;position:relative;font-size:11px;color:var(--sub)}
+.step .c{width:26px;height:26px;border-radius:50%;margin:0 auto 6px;display:grid;place-items:center;background:var(--gray-bg);color:var(--sub);font-weight:700;font-size:11px;position:relative;z-index:1}
+.step:before{content:"";position:absolute;top:13px;left:-50%;right:50%;height:2px;background:var(--line)}
+.step:first-child:before{display:none}
+.step.done .c{background:var(--accent);color:var(--accent-ink)}.step.done:before,.step.cur:before{background:var(--accent)}
+.step.cur .c{background:var(--accent-soft);color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.step.cur{color:var(--ink);font-weight:600}
+/* charts */
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{font-size:11px;fill:var(--sub);font-family:inherit}
+.legend{display:flex;flex-direction:column;gap:8px;font-size:12.5px}
+.legend span{display:flex;align-items:center;gap:8px}.legend i{width:10px;height:10px;border-radius:3px;flex:none}
+.legend b{margin-left:auto;font-weight:600}
+.donut-wrap{display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:center}
+/* toast */
+.toasts{position:fixed;bottom:18px;right:18px;z-index:90;display:flex;flex-direction:column;gap:8px}
+.toast{background:#0F172A;color:#fff;padding:11px 14px;border-radius:10px;font-size:13px;display:flex;gap:8px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.2);animation:pop .2s ease}
+.toast i{color:#4ADE80;font-size:17px}
+/* feed */
+.feed-in{display:flex;gap:8px;margin-top:4px}.feed-in .inp{flex:1}
+.mention{color:var(--accent);font-weight:600}
+/* utility */
+.muted{color:var(--sub)}.right{text-align:right}.nowrap{white-space:nowrap}.mt0{margin-top:0}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.big{font-size:20px;font-weight:700}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:12.5px;font-weight:550}
+.chip.active{background:var(--ink);border-color:var(--ink);color:#fff}
+/* responsive */
+@media (max-width:1100px){.g-4{grid-template-columns:repeat(2,minmax(0,1fr))}.g-21{grid-template-columns:1fr}.g-3{grid-template-columns:1fr 1fr}.search{display:none}}
+@media (max-width:860px){
+ .app{grid-template-columns:1fr}
+ .side{position:fixed;left:0;top:0;bottom:0;width:260px;z-index:80;transform:translateX(-100%);transition:transform .25s}
+ .side.open{transform:none}
+ .menu-toggle{display:grid}
+ .top{padding:0 14px}.content{padding:16px}.demo-bar{padding:8px 14px}
+ .g-3,.g-2{grid-template-columns:1fr}
+ .form{grid-template-columns:1fr}
+ .donut-wrap{grid-template-columns:120px 1fr}
+ .kv{grid-template-columns:1fr 1fr}
+ .demo-bar .hide-sm{display:none}
+}
+@media (max-width:520px){.g-4{grid-template-columns:1fr 1fr}.kpi .val{font-size:21px}.top h1{font-size:16px}}
+
+</style>
+</head>
+<body>
+<noscript>This demo needs JavaScript turned on.</noscript>
+<script>
+/* MA System Solutions – demo kit (sample data only, no server) */
+(function () {
+  'use strict';
+  var PORTFOLIO = 'https://masystemsolutions.github.io/';
+  var K = window.K = {};
+
+  /* ---------- utils ---------- */
+  K.esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  K.uid = function (p) { return (p || 'id') + '-' + Math.random().toString(36).slice(2, 8); };
+  K.today = function () { var d = new Date(); d.setHours(0, 0, 0, 0); return d; };
+  K.addDays = function (d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; };
+  K.iso = function (d) { var x = new Date(d); return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0'); };
+  K.day = function (n) { return K.iso(K.addDays(K.today(), n)); };
+  K.parse = function (s) { var p = String(s).slice(0, 10).split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); };
+  K.dfmt = function (s) { if (!s) return '—'; return K.parse(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); };
+  K.dshort = function (s) { if (!s) return '—'; return K.parse(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); };
+  K.diff = function (s) { return Math.round((K.parse(s) - K.today()) / 864e5); };
+  K.rel = function (s) {
+    var n = K.diff(s);
+    if (n === 0) return 'Today'; if (n === 1) return 'Tomorrow'; if (n === -1) return 'Yesterday';
+    return n > 0 ? 'In ' + n + ' days' : Math.abs(n) + ' days ago';
+  };
+  K.ago = function (ts) {
+    var m = Math.round((Date.now() - ts) / 6e4);
+    if (m < 1) return 'Just now'; if (m < 60) return m + 'm ago';
+    var h = Math.round(m / 60); if (h < 24) return h + 'h ago';
+    var d = Math.round(h / 24); return d + 'd ago';
+  };
+  K.num = function (n, dp) { return Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: dp || 0, maximumFractionDigits: dp || 0 }); };
+  K.money = function (n, cur, dp) {
+    cur = cur || (K.APP && K.APP.currency) || 'USD';
+    var sym = cur === 'PHP' ? '₱' : '$';
+    var v = Math.round(Number(n || 0) * Math.pow(10, dp || 0)) / Math.pow(10, dp || 0);
+    return (v < 0 ? '-' : '') + sym + K.num(Math.abs(v), dp || 0);
+  };
+  K.compact = function (n, cur) {
+    var sym = cur === 'PHP' ? '₱' : cur === 'USD' ? '$' : '';
+    var a = Math.abs(n);
+    if (a >= 1e6) return sym + (n / 1e6).toFixed(a >= 1e7 ? 1 : 2).replace(/\.0+$/, '') + 'M';
+    if (a >= 1e3) return sym + (n / 1e3).toFixed(a >= 1e4 ? 0 : 1).replace(/\.0$/, '') + 'K';
+    return sym + K.num(n);
+  };
+  K.initials = function (n) { return String(n || '?').split(/\s+/).filter(Boolean).slice(0, 2).map(function (w) { return w[0]; }).join('').toUpperCase(); };
+  K.pick = function (arr, i) { return arr[i % arr.length]; };
+  K.badge = function (t, cls, dot) { return '<span class="badge ' + (cls || '') + '">' + (dot ? '<span class="d"></span>' : '') + K.esc(t) + '</span>'; };
+  K.avatar = function (name, color) { return '<span class="avatar"' + (color ? ' style="background:' + color + '22;color:' + color + '"' : '') + '>' + K.esc(K.initials(name)) + '</span>'; };
+  K.sum = function (a, f) { return a.reduce(function (s, x) { return s + (f ? f(x) : x); }, 0); };
+  K.by = function (k, desc) { return function (a, b) { var x = typeof k === 'function' ? k(a) : a[k], y = typeof k === 'function' ? k(b) : b[k]; return (x > y ? 1 : x < y ? -1 : 0) * (desc ? -1 : 1); }; };
+
+  /* ---------- store (this browser only) ---------- */
+  var mem = null;
+  function skey() { return 'ma-demo-' + K.APP.key + '-v1'; }
+  K.load = function () {
+    try { var raw = localStorage.getItem(skey()); if (raw) { mem = JSON.parse(raw); return mem; } } catch (e) {}
+    mem = K.APP.seed(); K.save(); return mem;
+  };
+  K.save = function () { try { localStorage.setItem(skey(), JSON.stringify(mem)); } catch (e) {} };
+  K.reset = function () { try { localStorage.removeItem(skey()); } catch (e) {} mem = K.APP.seed(); K.save(); K.db = mem; K.toast('Demo data reset'); K.route(); };
+
+  /* ---------- toast ---------- */
+  K.toast = function (msg) {
+    var box = document.querySelector('.toasts');
+    var t = document.createElement('div'); t.className = 'toast'; t.innerHTML = '<i class="ti ti-circle-check"></i>' + K.esc(msg);
+    box.appendChild(t); setTimeout(function () { t.style.opacity = '0'; t.style.transition = 'opacity .3s'; }, 2400); setTimeout(function () { t.remove(); }, 2800);
+  };
+
+  /* ---------- drawer & modal ---------- */
+  var scrim, drawer, modal, onCloseDrawer;
+  K.drawer = function (o) {
+    drawer.innerHTML = '<div class="dr-h"><div class="grow">' + (o.kicker ? '<small class="muted">' + o.kicker + '</small>' : '') + '<h3>' + o.title + '</h3>' + (o.sub ? '<div class="muted" style="margin-top:4px">' + o.sub + '</div>' : '') + '</div><button class="icon-btn" data-x aria-label="Close"><i class="ti ti-x"></i></button></div>' +
+      '<div class="dr-b">' + o.body + '</div>' + (o.foot ? '<div class="dr-f">' + o.foot + '</div>' : '');
+    drawer.classList.add('open'); scrim.classList.add('open');
+    onCloseDrawer = o.onClose || null;
+    if (o.mount) o.mount(drawer);
+  };
+  K.closeDrawer = function () { drawer.classList.remove('open'); if (!modal.classList.contains('open')) scrim.classList.remove('open'); if (onCloseDrawer) { var f = onCloseDrawer; onCloseDrawer = null; f(); } };
+  K.modal = function (o) {
+    modal.innerHTML = '<div class="box"><div class="dr-h"><div class="grow"><h3>' + o.title + '</h3>' + (o.sub ? '<div class="muted">' + o.sub + '</div>' : '') + '</div><button class="icon-btn" data-mx aria-label="Close"><i class="ti ti-x"></i></button></div>' +
+      '<div class="dr-b">' + o.body + '</div>' + (o.foot ? '<div class="dr-f">' + o.foot + '</div>' : '') + '</div>';
+    modal.classList.add('open'); scrim.classList.add('open');
+    if (o.mount) o.mount(modal);
+    var first = modal.querySelector('input,select,textarea'); if (first) setTimeout(function () { first.focus(); }, 30);
+  };
+  K.closeModal = function () { modal.classList.remove('open'); if (!drawer.classList.contains('open')) scrim.classList.remove('open'); };
+
+  /* ---------- forms ---------- */
+  // fields: [{k,label,type:'text|number|date|select|textarea|email',opts:[],req,full,val,ph,step}]
+  K.formHTML = function (fields) {
+    return '<div class="form">' + fields.map(function (f) {
+      var v = f.val == null ? '' : f.val, id = 'f-' + f.k, ctl;
+      if (f.type === 'select') ctl = '<select class="sel" id="' + id + '" name="' + f.k + '">' + f.opts.map(function (o) { var ov = typeof o === 'object' ? o.v : o, ol = typeof o === 'object' ? o.l : o; return '<option value="' + K.esc(ov) + '"' + (String(ov) === String(v) ? ' selected' : '') + '>' + K.esc(ol) + '</option>'; }).join('') + '</select>';
+      else if (f.type === 'textarea') ctl = '<textarea class="inp" rows="3" id="' + id + '" name="' + f.k + '" placeholder="' + K.esc(f.ph || '') + '">' + K.esc(v) + '</textarea>';
+      else ctl = '<input class="inp" id="' + id + '" name="' + f.k + '" type="' + (f.type || 'text') + '"' + (f.step ? ' step="' + f.step + '"' : '') + (f.min != null ? ' min="' + f.min + '"' : '') + ' value="' + K.esc(v) + '" placeholder="' + K.esc(f.ph || '') + '">';
+      return '<div class="f' + (f.full || f.type === 'textarea' ? ' full' : '') + '" data-k="' + f.k + '"' + (f.req ? ' data-req="1"' : '') + (f.type === 'number' ? ' data-num="1"' : '') + (f.type === 'email' ? ' data-email="1"' : '') + '><label for="' + id + '">' + K.esc(f.label) + (f.req ? ' <span style="color:var(--bad)">*</span>' : '') + '</label>' + ctl + '<span class="err">' + (f.err || 'Required') + '</span></div>';
+    }).join('') + '</div>';
+  };
+  K.readForm = function (root) {
+    var out = {}, ok = true;
+    root.querySelectorAll('.f[data-k]').forEach(function (f) {
+      var el = f.querySelector('input,select,textarea'), v = el.value.trim();
+      var bad = (f.dataset.req && !v) || (f.dataset.email && v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) || (f.dataset.num && v && isNaN(Number(v))) || (f.dataset.num && f.dataset.req && Number(v) <= 0);
+      f.classList.toggle('bad', !!bad); if (bad) ok = false;
+      el.oninput = function () { f.classList.remove('bad'); };
+      out[f.dataset.k] = f.dataset.num ? Number(v || 0) : v;
+    });
+    return ok ? out : null;
+  };
+
+  /* ---------- charts (SVG) ---------- */
+  var PAL = ['var(--accent)', '#0EA5A4', '#F59E0B', '#8B5CF6', '#EF4444', '#64748B', '#22C55E', '#EC4899', '#0EA5E9', '#A3A3A3', '#84CC16'];
+  K.PAL = PAL;
+  K.bars = function (data, o) {
+    o = o || {}; var W = window.innerWidth < 700 ? 480 : (o.w || 560), H = o.h || 220, pl = 44, pb = 28, pt = 10, n = data.length;
+    var max = Math.max.apply(null, data.map(function (d) { return d.v; }).concat([1])); max = o.int ? Math.max(4, Math.ceil(max / 4) * 4) : niceMax(max);
+    var bw = (W - pl) / n, g = '';
+    for (var i = 0; i <= 4; i++) { var y = pt + (H - pt - pb) * (1 - i / 4); g += '<line x1="' + pl + '" x2="' + W + '" y1="' + y + '" y2="' + y + '" stroke="var(--line)"/><text x="' + (pl - 8) + '" y="' + (y + 4) + '" text-anchor="end">' + (o.fmt ? o.fmt(max * i / 4) : K.compact(max * i / 4)) + '</text>'; }
+    data.forEach(function (d, i) {
+      var h = (H - pt - pb) * d.v / max, x = pl + i * bw + bw * 0.2, w = bw * 0.6;
+      g += '<rect x="' + x + '" y="' + (H - pb - h) + '" width="' + w + '" height="' + Math.max(h, 0) + '" rx="4" fill="' + (d.c || o.color || 'var(--accent)') + '"><title>' + K.esc(d.l) + ': ' + (o.fmt ? o.fmt(d.v) : K.num(d.v)) + '</title></rect>';
+      g += '<text x="' + (x + w / 2) + '" y="' + (H - 8) + '" text-anchor="middle">' + K.esc(d.l) + '</text>';
+    });
+    return '<div class="chart"><svg viewBox="0 0 ' + W + ' ' + H + '" role="img">' + g + '</svg></div>';
+  };
+  K.hbars = function (data, o) {
+    o = o || {}; var max = Math.max.apply(null, data.map(function (d) { return d.v; }).concat([1]));
+    return '<div style="display:flex;flex-direction:column;gap:10px">' + data.map(function (d, i) {
+      return '<div><div class="row" style="justify-content:space-between;font-size:12.5px;margin-bottom:4px"><span>' + K.esc(d.l) + '</span><b>' + (o.fmt ? o.fmt(d.v) : K.num(d.v)) + '</b></div><div class="bar"><span style="width:' + (100 * d.v / max) + '%;background:' + (d.c || PAL[i % PAL.length]) + '"></span></div></div>';
+    }).join('') + '</div>';
+  };
+  K.line = function (labels, series, o) {
+    o = o || {}; var W = window.innerWidth < 700 ? 480 : (o.w || 560), H = o.h || 220, pl = 44, pb = 28, pt = 10, n = labels.length;
+    var all = []; series.forEach(function (s) { all = all.concat(s.v); });
+    var raw = Math.max.apply(null, all.concat([1])), max = o.int ? Math.max(4, Math.ceil(raw / 4) * 4) : niceMax(raw);
+    var g = '', step = (W - pl - 10) / Math.max(n - 1, 1);
+    for (var i = 0; i <= 4; i++) { var y = pt + (H - pt - pb) * (1 - i / 4); g += '<line x1="' + pl + '" x2="' + W + '" y1="' + y + '" y2="' + y + '" stroke="var(--line)"/><text x="' + (pl - 8) + '" y="' + (y + 4) + '" text-anchor="end">' + (o.fmt ? o.fmt(max * i / 4) : K.compact(max * i / 4)) + '</text>'; }
+    labels.forEach(function (l, i) { if (n <= 12 || i % 2 === 0) g += '<text x="' + (pl + i * step) + '" y="' + (H - 8) + '" text-anchor="middle">' + K.esc(l) + '</text>'; });
+    series.forEach(function (s, si) {
+      var c = s.c || PAL[si], pts = s.v.map(function (v, i) { return [pl + i * step, pt + (H - pt - pb) * (1 - v / max)]; });
+      var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ');
+      if (si === 0 && o.area !== false) g += '<path d="' + d + ' L' + pts[pts.length - 1][0] + ' ' + (H - pb) + ' L' + pl + ' ' + (H - pb) + ' Z" fill="' + c + '" opacity=".08"/>';
+      g += '<path d="' + d + '" fill="none" stroke="' + c + '" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+      pts.forEach(function (p, i) { g += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="3.5" fill="#fff" stroke="' + c + '" stroke-width="2"><title>' + K.esc(s.n || '') + ' ' + K.esc(labels[i]) + ': ' + (o.fmt ? o.fmt(s.v[i]) : K.num(s.v[i])) + '</title></circle>'; });
+    });
+    var leg = series.length > 1 ? '<div class="row" style="gap:14px;font-size:12px;margin-top:6px">' + series.map(function (s, si) { return '<span class="row" style="gap:6px"><i style="width:10px;height:10px;border-radius:3px;background:' + (s.c || PAL[si]) + '"></i>' + K.esc(s.n) + '</span>'; }).join('') + '</div>' : '';
+    return '<div class="chart"><svg viewBox="0 0 ' + W + ' ' + H + '" role="img">' + g + '</svg>' + leg + '</div>';
+  };
+  K.donut = function (segs, o) {
+    o = o || {}; var tot = K.sum(segs, function (s) { return s.v; }) || 1, R = 60, r = 42, a0 = -Math.PI / 2, g = '';
+    segs.forEach(function (s, i) {
+      var a1 = a0 + 2 * Math.PI * s.v / tot, large = a1 - a0 > Math.PI ? 1 : 0, c = s.c || PAL[i % PAL.length];
+      if (s.v >= tot) { g += '<circle cx="70" cy="70" r="' + ((R + r) / 2) + '" fill="none" stroke="' + c + '" stroke-width="' + (R - r) + '"/>'; }
+      else if (s.v > 0) g += '<path d="M' + (70 + R * Math.cos(a0)) + ' ' + (70 + R * Math.sin(a0)) + ' A' + R + ' ' + R + ' 0 ' + large + ' 1 ' + (70 + R * Math.cos(a1)) + ' ' + (70 + R * Math.sin(a1)) + ' L' + (70 + r * Math.cos(a1)) + ' ' + (70 + r * Math.sin(a1)) + ' A' + r + ' ' + r + ' 0 ' + large + ' 0 ' + (70 + r * Math.cos(a0)) + ' ' + (70 + r * Math.sin(a0)) + ' Z" fill="' + c + '"><title>' + K.esc(s.l) + ': ' + (o.fmt ? o.fmt(s.v) : K.num(s.v)) + '</title></path>';
+      a0 = a1;
+    });
+    g += '<text x="70" y="68" text-anchor="middle" style="font-size:18px;font-weight:700;fill:var(--ink)">' + K.esc(o.center || K.num(tot)) + '</text><text x="70" y="86" text-anchor="middle">' + K.esc(o.centerLabel || 'Total') + '</text>';
+    var leg = '<div class="legend">' + segs.map(function (s, i) { return '<span><i style="background:' + (s.c || PAL[i % PAL.length]) + '"></i>' + K.esc(s.l) + '<b>' + (o.fmt ? o.fmt(s.v) : K.num(s.v)) + '</b></span>'; }).join('') + '</div>';
+    return '<div class="donut-wrap"><div class="chart"><svg viewBox="0 0 140 140" role="img">' + g + '</svg></div>' + leg + '</div>';
+  };
+  function niceMax(m) { if (m <= 0) return 1; var p = Math.pow(10, Math.floor(Math.log10(m))), f = m / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 4 ? 4 : f <= 6 ? 6 : f <= 8 ? 8 : 10) * p; }
+
+  /* ---------- kanban ---------- */
+  // cols:[{id,label}], items, o:{col:item=>colId, card:item=>html, onMove:(item,colId)=>{}, onOpen:item=>{}}
+  K.board = function (el, cols, items, o) {
+    el.innerHTML = '<div class="board">' + cols.map(function (c) {
+      var its = items.filter(function (it) { return o.col(it) === c.id; });
+      return '<div class="col"><div class="col-h"><span>' + K.esc(c.label) + '</span><span class="n">' + its.length + '</span></div><div class="col-b" data-col="' + c.id + '">' +
+        its.map(function (it) { return '<div class="kc" draggable="true" data-id="' + it.id + '">' + o.card(it) + '</div>'; }).join('') + '</div></div>';
+    }).join('') + '</div>';
+    var dragId = null;
+    el.querySelectorAll('.kc').forEach(function (c) {
+      c.addEventListener('dragstart', function (e) { dragId = c.dataset.id; e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', dragId); } catch (x) {} });
+      c.addEventListener('click', function () { var it = items.filter(function (i) { return i.id === c.dataset.id; })[0]; if (it && o.onOpen) o.onOpen(it); });
+    });
+    el.querySelectorAll('.col-b').forEach(function (b) {
+      b.addEventListener('dragover', function (e) { e.preventDefault(); b.classList.add('over'); });
+      b.addEventListener('dragleave', function () { b.classList.remove('over'); });
+      b.addEventListener('drop', function (e) {
+        e.preventDefault(); b.classList.remove('over');
+        var it = items.filter(function (i) { return i.id === dragId; })[0];
+        if (it && o.col(it) !== b.dataset.col) o.onMove(it, b.dataset.col);
+      });
+    });
+  };
+
+  /* ---------- shell + router ---------- */
+  K.state = {};
+  K.go = function (id) { if (location.hash === '#/' + id) K.route(); else location.hash = '#/' + id; };
+  K.route = function () {
+    var id = (location.hash.replace(/^#\/?/, '') || K.APP.nav[0].id).split('/')[0];
+    var nv = K.APP.nav.filter(function (n) { return n.id === id; })[0] || K.APP.nav[0];
+    document.querySelectorAll('.nav a').forEach(function (a) { a.classList.toggle('active', a.dataset.id === nv.id); });
+    document.getElementById('topTitle').textContent = nv.label;
+    var c = document.getElementById('content'); c.innerHTML = '';
+    K.APP.views[nv.id](c);
+    document.querySelector('.side').classList.remove('open');
+    if (!drawer.classList.contains('open') && !modal.classList.contains('open')) scrim.classList.remove('open');
+    K.refreshCounts();
+    window.scrollTo(0, 0);
+  };
+  K.refreshCounts = function () {
+    K.APP.nav.forEach(function (n) {
+      var el = document.querySelector('.nav a[data-id="' + n.id + '"] .count');
+      if (el && n.count) { var v = n.count(); el.textContent = v; el.style.display = v ? '' : 'none'; }
+    });
+  };
+  K.start = function (APP) {
+    K.APP = APP;
+    document.documentElement.style.setProperty('--accent', APP.accent);
+    if (APP.accent2) document.documentElement.style.setProperty('--accent-2', APP.accent2);
+    document.documentElement.style.setProperty('--accent-soft', APP.accentSoft || 'rgba(47,111,237,.1)');
+    K.db = K.load();
+    if (APP.roles) K.state.role = APP.roles[0].v;
+    var inquire = PORTFOLIO + '?inquire=' + encodeURIComponent(APP.name);
+    var groups = {}, navHtml = '';
+    APP.nav.forEach(function (n) { var g = n.group || ''; (groups[g] = groups[g] || []).push(n); });
+    Object.keys(groups).forEach(function (g) {
+      if (g) navHtml += '<div class="nav-label">' + K.esc(g) + '</div>';
+      navHtml += groups[g].map(function (n) { return '<a href="#/' + n.id + '" data-id="' + n.id + '"><i class="ti ' + n.icon + '"></i>' + K.esc(n.label) + (n.count ? '<span class="count"></span>' : '') + '</a>'; }).join('');
+    });
+    document.body.innerHTML =
+      '<div class="app"><aside class="side"><div class="brand"><span class="brand-ico"><i class="ti ' + APP.icon + '"></i></span><div><b>' + K.esc(APP.name) + '</b><small>' + K.esc(APP.tagline) + '</small></div></div>' +
+      '<nav class="nav" aria-label="Main">' + navHtml + '</nav>' +
+      '<div class="side-foot"><div class="role">' + '<span class="avatar" id="meAv"></span><div style="min-width:0;flex:1"><b id="meName"></b><small id="meRole"></small>' +
+      (APP.roles ? '<select id="roleSel" aria-label="Switch demo role">' + APP.roles.map(function (r) { return '<option value="' + r.v + '">View as: ' + K.esc(r.l) + '</option>'; }).join('') + '</select>' : '') + '</div></div></div></aside>' +
+      '<div class="main"><div class="demo-bar"><span class="pill">Demo</span><span class="hide-sm">Sample data only. Your changes stay in this browser.</span><span class="sp"></span><button type="button" id="resetBtn"><i class="ti ti-refresh"></i> Reset demo</button><a class="cta" href="' + inquire + '" target="_top"><i class="ti ti-sparkles"></i> Get this system</a></div>' +
+      '<header class="top"><button class="icon-btn menu-toggle" id="menuBtn" aria-label="Menu"><i class="ti ti-menu-2"></i></button><div><div class="crumb">' + K.esc(APP.name) + '</div><h1 id="topTitle"></h1></div><span class="sp"></span>' +
+      '<label class="search"><i class="ti ti-search"></i><input id="gSearch" placeholder="' + K.esc(APP.searchPh || 'Search…') + '"></label>' +
+      '<button class="icon-btn" id="bellBtn" aria-label="Notifications"><i class="ti ti-bell"></i><span class="dot"></span></button></header>' +
+      '<main class="content" id="content"></main></div></div>' +
+      '<div class="scrim" id="scrim"></div><aside class="drawer" id="drawer" aria-label="Details"></aside><div class="modal" id="modal" role="dialog" aria-modal="true"></div><div class="toasts"></div>';
+    scrim = document.getElementById('scrim'); drawer = document.getElementById('drawer'); modal = document.getElementById('modal');
+    scrim.addEventListener('click', function () { K.closeModal(); K.closeDrawer(); document.querySelector('.side').classList.remove('open'); });
+    drawer.addEventListener('click', function (e) { if (e.target.closest('[data-x]')) K.closeDrawer(); });
+    modal.addEventListener('click', function (e) { if (e.target === modal || e.target.closest('[data-mx]')) K.closeModal(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { if (modal.classList.contains('open')) K.closeModal(); else K.closeDrawer(); } });
+    document.getElementById('menuBtn').onclick = function () { document.querySelector('.side').classList.add('open'); scrim.classList.add('open'); };
+    document.getElementById('resetBtn').onclick = function () { K.modal({ title: 'Reset demo data?', body: '<p class="mt0">This restores the original sample data in this browser.</p>', foot: '<button class="btn" data-mx>Cancel</button><button class="btn primary" id="doReset">Reset</button>', mount: function (m) { m.querySelector('#doReset').onclick = function () { K.closeModal(); K.reset(); }; } }); };
+    document.getElementById('bellBtn').onclick = function () { K.drawer({ title: 'Notifications', body: (APP.notifications ? APP.notifications() : '<div class="empty">You’re all caught up.</div>') }); };
+    var gs = document.getElementById('gSearch');
+    gs.addEventListener('keydown', function (e) { if (e.key === 'Enter' && APP.onSearch) APP.onSearch(gs.value.trim()); });
+    function paintMe() {
+      var me = APP.me ? APP.me() : { name: 'Mia Briones', role: 'Admin' };
+      document.getElementById('meAv').textContent = K.initials(me.name);
+      document.getElementById('meName').textContent = me.name;
+      document.getElementById('meRole').textContent = me.role;
+    }
+    var rs = document.getElementById('roleSel');
+    if (rs) rs.onchange = function () { K.state.role = rs.value; paintMe(); K.toast('Now viewing as ' + rs.options[rs.selectedIndex].text.replace('View as: ', '')); K.route(); };
+    paintMe();
+    window.addEventListener('hashchange', K.route);
+    K.route();
+  };
+})();
+
+</script>
+<script>
+(function () {
+  var E = K.esc, H = 36e5;
+  var css = document.createElement('style');
+  css.textContent = '\
+.doc-wrap{container-type:inline-size;width:100%;max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:18px}\
+.doc-page{position:relative;width:100%;aspect-ratio:8.5/11;background:#fff;box-shadow:0 2px 12px rgba(15,23,42,.12);border:1px solid var(--line);padding:7.5% 8.5%;font-family:Georgia,"Times New Roman",serif;font-size:1.72cqw;line-height:1.55;color:#1f2937;overflow:hidden}\
+.doc-page.img{padding:0}.doc-page.img img{width:100%;height:100%;object-fit:contain;display:block}\
+.doc-page h1{font-size:2.3em;margin:0 0 .3em;text-align:center;letter-spacing:.02em}.doc-page h2{font-size:1.15em;margin:1.1em 0 .3em}\
+.doc-page p{margin:0 0 .65em}.doc-page .muted{color:#6b7280}\
+.doc-page .sigline{position:absolute;border-top:1px solid #111;font-size:.85em;color:#555;padding-top:.3em}\
+.fld{position:absolute;border:1.5px dashed;border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:Inter,system-ui,sans-serif;font-size:max(9px,1.25cqw);font-weight:600;cursor:pointer;user-select:none;gap:4px;overflow:hidden;line-height:1.1}\
+.fld.filled{border-style:solid;background:transparent!important}\
+.fld img{max-width:100%;max-height:100%}\
+.fld .x{position:absolute;top:-1px;right:-1px;background:#111;color:#fff;border-radius:0 3px 0 4px;width:16px;height:16px;font-size:11px;display:none;align-items:center;justify-content:center}\
+.editing .fld:hover .x{display:flex}\
+.fld.active{box-shadow:0 0 0 3px rgba(250,204,21,.6);animation:pulse 1.4s infinite}\
+@keyframes pulse{50%{box-shadow:0 0 0 6px rgba(250,204,21,.25)}}\
+.fld.done-ro{border-color:transparent!important;background:transparent!important;cursor:default}\
+.editor{display:grid;grid-template-columns:240px minmax(0,1fr);gap:18px;align-items:start}\
+.palette{position:sticky;top:84px;display:flex;flex-direction:column;gap:6px}\
+.pal{display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--card);cursor:pointer;font-weight:550;font-size:13px}\
+.pal.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink) inset}\
+.pal i{font-size:17px}\
+.who{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:9px;cursor:pointer;font-size:12.5px;border:1px solid transparent}\
+.who.on{border-color:var(--line);background:var(--card)}\
+.who .sw{width:12px;height:12px;border-radius:4px;flex:none}\
+.page-click{cursor:crosshair}\
+.wiz{display:flex;gap:8px;flex-wrap:wrap}\
+.wiz .ws{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:12.5px;font-weight:600;color:var(--sub)}\
+.wiz .ws b{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--gray-bg);font-size:11px}\
+.wiz .ws.on{color:var(--ink);border-color:var(--ink)}.wiz .ws.on b{background:var(--ink);color:#fff}.wiz .ws.ok b{background:#16A34A;color:#fff}\
+.tpl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}\
+.tpl{border:1px solid var(--line);border-radius:12px;background:var(--card);cursor:pointer;overflow:hidden;transition:.15s}\
+.tpl:hover,.tpl.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink) inset}\
+.tpl .th{height:120px;background:#F3F4F6;display:grid;place-items:center;font-size:40px;color:#9CA3AF;border-bottom:1px solid var(--line)}\
+.tpl .tb{padding:10px 12px}.tpl .tb b{display:block;font-size:13px}.tpl .tb small{color:var(--sub)}\
+.sign-view{position:fixed;inset:0;z-index:65;background:#E5E7EB;display:none;flex-direction:column}\
+.sign-view.open{display:flex}\
+.sv-top{background:#111827;color:#fff;display:flex;align-items:center;gap:12px;padding:10px 18px;flex-wrap:wrap}\
+.sv-top .grow{flex:1;min-width:0}.sv-top small{color:#9CA3AF}\
+.sv-guide{background:#FACC15;color:#111;display:flex;align-items:center;gap:10px;padding:8px 18px;font-weight:600;font-size:13px;flex-wrap:wrap}\
+.sv-body{flex:1;overflow:auto;padding:24px 14px 60px}\
+.pad{width:100%;height:170px;border:1.5px dashed #9CA3AF;border-radius:10px;background:#fff;touch-action:none;cursor:crosshair;display:block}\
+.typed{font-family:"Great Vibes",cursive;font-size:44px;text-align:center;padding:18px 10px;border:1.5px dashed #9CA3AF;border-radius:10px;background:#fff;min-height:96px}\
+.rec-row{display:grid;grid-template-columns:28px 1fr 1fr 130px 34px;gap:8px;align-items:center}\
+.prog{display:flex;flex-direction:column;gap:0}\
+.prog .pi{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}\
+.prog .pi:last-child{border-bottom:0}\
+.brand-ico{background:#FACC15!important;color:#18181B!important}\
+.cert{border:2px solid #111827;border-radius:12px;padding:22px;background:#fff}\
+@media (max-width:640px){.sv-top .grow{flex-basis:100%}.sv-top .brand-ico,.sv-top small{display:none}.sv-top{gap:8px}.sv-guide{font-size:12px}}\
+.fld span{white-space:nowrap}\
+@media (max-width:860px){.editor{grid-template-columns:1fr}.palette{position:static;flex-direction:row;flex-wrap:wrap}.rec-row{grid-template-columns:22px 1fr 34px}.rec-row .hide-sm{display:none}}';
+  document.head.appendChild(css);
+  var gv = document.createElement('link'); gv.rel = 'stylesheet'; gv.href = 'https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap'; document.head.appendChild(gv);
+
+  var COLORS = ['#2563EB', '#DB2777', '#059669', '#D97706', '#7C3AED'];
+  var FT = { sig: { l: 'Signature', i: 'ti-signature', w: 26, h: 6 }, ini: { l: 'Initials', i: 'ti-letter-case', w: 10, h: 5 }, date: { l: 'Date signed', i: 'ti-calendar', w: 16, h: 3.4 }, name: { l: 'Full name', i: 'ti-user', w: 24, h: 3.4 }, text: { l: 'Text', i: 'ti-forms', w: 24, h: 3.4 }, check: { l: 'Checkbox', i: 'ti-checkbox', w: 3.2, h: 2.5 } };
+  var USERS = { admin: { name: 'Mia Briones', email: 'mia@northwindco.com', role: 'Company admin' }, user: { name: 'Jordan Lee', email: 'jordan@northwindco.com', role: 'Company user' } };
+
+  /* ---------- documents ---------- */
+  var DOCS = {
+    nda: { title: 'Mutual Non-Disclosure Agreement', icon: 'ti-lock', pages: [
+      '<h1>Mutual Non-Disclosure Agreement</h1><p class="muted" style="text-align:center">Effective as of the date of the last signature below</p><p>This Mutual Non-Disclosure Agreement (the “Agreement”) is entered into by and between <b>Northwind Co.</b> and the counterparty named below (each a “Party”).</p><h2>1. Confidential Information</h2><p>“Confidential Information” means any non-public business, technical or financial information disclosed by one Party to the other, in any form, that is marked confidential or would reasonably be understood to be confidential.</p><h2>2. Obligations</h2><p>Each Party will use the other Party’s Confidential Information only to evaluate a potential business relationship, will protect it with at least reasonable care, and will not disclose it to anyone except employees and advisors who need to know it.</p><h2>3. Term</h2><p>This Agreement remains in effect for two (2) years from the Effective Date. Obligations for trade secrets survive for as long as they remain trade secrets.</p><h2>4. General</h2><p>This Agreement is the entire agreement on this subject. It may only be changed in writing signed by both Parties.</p><div class="sigline" style="left:8.5%;top:80%;width:36%">Northwind Co. — Signature</div><div class="sigline" style="left:55.5%;top:80%;width:36%">Counterparty — Signature</div><div class="sigline" style="left:8.5%;top:90%;width:22%">Date</div><div class="sigline" style="left:55.5%;top:90%;width:22%">Date</div>'],
+      fields: [{ t: 'sig', r: 0, x: 8.5, y: 73.2 }, { t: 'date', r: 0, x: 8.5, y: 86 }, { t: 'sig', r: 1, x: 55.5, y: 73.2 }, { t: 'date', r: 1, x: 55.5, y: 86 }] },
+    offer: { title: 'Employment Offer Letter', icon: 'ti-briefcase', pages: [
+      '<h1>Offer of Employment</h1><p class="muted" style="text-align:center">Northwind Co. · People Operations</p><p>Dear Candidate,</p><p>We are delighted to offer you the position of <b>Operations Coordinator</b> at Northwind Co., reporting to the Head of Operations. Your anticipated start date is the first Monday after acceptance.</p><h2>Compensation</h2><p>Your annual base salary will be paid in accordance with our regular payroll schedule. You will be eligible for our standard benefits, paid time off and remote work allowance.</p><h2>Conditions</h2><p>This offer is contingent on the successful completion of a background check and your signature on our confidentiality agreement.</p><p>Please confirm your acceptance by signing below. We look forward to welcoming you to the team.</p><p>Sincerely,<br>Mia Briones<br>Head of Operations</p><div class="sigline" style="left:8.5%;top:82%;width:36%">Candidate signature</div><div class="sigline" style="left:55.5%;top:82%;width:22%">Date</div><div class="sigline" style="left:8.5%;top:92%;width:36%">Candidate full name</div>'],
+      fields: [{ t: 'sig', r: 0, x: 8.5, y: 75.2 }, { t: 'date', r: 0, x: 55.5, y: 78.2 }, { t: 'name', r: 0, x: 8.5, y: 88.2 }, { t: 'check', r: 0, x: 55.5, y: 88.6 }] },
+    service: { title: 'Service Agreement', icon: 'ti-file-certificate', pages: [
+      '<h1>Service Agreement</h1><p>This Service Agreement is made between <b>Northwind Co.</b> (“Client”) and the service provider named below (“Provider”).</p><h2>1. Services</h2><p>Provider will deliver the services described in the attached statement of work, on the timeline and to the standard described there.</p><h2>2. Fees & Payment</h2><p>Client will pay invoices within thirty (30) days of receipt. Late amounts may accrue interest of 1% per month.</p><h2>3. Term & Termination</h2><p>This Agreement starts on the Effective Date and continues for twelve (12) months. Either Party may terminate with thirty (30) days’ written notice.</p><p style="margin-top:2.2em">Initials of both parties confirming page 1: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>',
+      '<h2>4. Confidentiality</h2><p>Each Party will keep the other’s confidential information private and use it only to perform this Agreement.</p><h2>5. Liability</h2><p>Neither Party is liable for indirect or consequential damages. Each Party’s total liability is limited to the fees paid in the prior twelve months.</p><h2>6. Signatures</h2><p>By signing below, each Party agrees to the terms of this Agreement.</p><div class="sigline" style="left:8.5%;top:58%;width:36%">Client — Northwind Co.</div><div class="sigline" style="left:55.5%;top:58%;width:36%">Provider</div><div class="sigline" style="left:8.5%;top:68%;width:22%">Date</div><div class="sigline" style="left:55.5%;top:68%;width:22%">Date</div><div class="sigline" style="left:55.5%;top:78%;width:36%">Provider company name</div>'],
+      fields: [{ t: 'ini', r: 0, x: 62, y: 66.6, p: 0 }, { t: 'ini', r: 1, x: 74, y: 66.6, p: 0 }, { t: 'sig', r: 0, x: 8.5, y: 51.2, p: 1 }, { t: 'date', r: 0, x: 8.5, y: 64, p: 1 }, { t: 'sig', r: 1, x: 55.5, y: 51.2, p: 1 }, { t: 'date', r: 1, x: 55.5, y: 64, p: 1 }, { t: 'text', r: 1, x: 55.5, y: 74, p: 1 }] },
+    lease: { title: 'Equipment Lease', icon: 'ti-building-warehouse', pages: [
+      '<h1>Equipment Lease Agreement</h1><p>Northwind Co. (“Lessor”) agrees to lease the equipment listed in Schedule A to the Lessee named below under the following terms.</p><h2>1. Lease Period</h2><p>Twenty-four (24) months from delivery. The Lessee may renew for an additional twelve months with written notice.</p><h2>2. Payments</h2><p>Monthly payments are due on the first business day of each month.</p><h2>3. Care of Equipment</h2><p>The Lessee will keep the equipment in good working order and report damage within 48 hours.</p><h2>4. Insurance</h2><p>The Lessee will insure the equipment against loss and name the Lessor as additional insured.</p><div class="sigline" style="left:8.5%;top:82%;width:36%">Lessee signature</div><div class="sigline" style="left:55.5%;top:82%;width:36%">Lessor approval</div>'],
+      fields: [{ t: 'sig', r: 0, x: 8.5, y: 75.2 }, { t: 'sig', r: 1, x: 55.5, y: 75.2 }] }
+  };
+
+  function mkFields(docKey, nRec) {
+    return DOCS[docKey].fields.filter(function (f) { return f.r < nRec; }).map(function (f) { var d = FT[f.t]; return { id: K.uid('f'), type: f.t, page: f.p || 0, x: f.x, y: f.y, w: d.w, h: d.h, rid: f.r, value: null, req: f.t !== 'check' }; });
+  }
+  function sigData(name) {
+    var c = document.createElement('canvas'); c.width = 520; c.height = 140; var x = c.getContext('2d');
+    x.fillStyle = '#1e3a8a'; x.font = '64px "Great Vibes", "Brush Script MT", cursive'; x.textBaseline = 'middle'; x.fillText(name, 14, 74);
+    return c.toDataURL('image/png');
+  }
+
+  function seed() {
+    var now = Date.now();
+    var people = [['Dana Whitfield', 'dana@harborrealty.com'], ['Kevin Tran', 'kevin@lumenanalytics.io'], ['Alicia Grant', 'alicia.grant@gmail.com'], ['Sam Patel', 'sam@cedarridge.health'], ['Nina Alvarez', 'nina@bluebird.co'], ['Omar Haddad', 'omar@kineticlabs.dev'], ['Laura Fields', 'laura@coastalins.com'], ['Chris Novak', 'chris@nimbus.app']];
+    var specs = [
+      ['Mutual NDA – Harbor & Co. Realty', 'nda', 'admin', [0], 'seq', 'action', 2],
+      ['Offer Letter – Alicia Grant', 'offer', 'admin', [2], 'seq', 'waiting', 20],
+      ['Service Agreement – Lumen Analytics', 'service', 'admin', [1], 'seq', 'waiting', 30],
+      ['Equipment Lease – Cedar Ridge Clinic', 'lease', 'user', [3], 'par', 'completed', 72],
+      ['Mutual NDA – Bluebird Bakery', 'nda', 'user', [4], 'seq', 'action', 5],
+      ['Service Agreement – Kinetic Labs', 'service', 'admin', [5], 'seq', 'completed', 120],
+      ['Offer Letter – Omar Haddad', 'offer', 'user', [5], 'seq', 'declined', 96],
+      ['Mutual NDA – Coastal Insurance', 'nda', 'admin', [6], 'par', 'completed', 200],
+      ['Equipment Lease – Nimbus Software', 'lease', 'admin', [7], 'par', 'draft', 1],
+      ['Service Agreement – Harbor & Co. Realty', 'service', 'user', [0], 'seq', 'waiting', 50]
+    ];
+    var envs = specs.map(function (s, i) {
+      var owner = USERS[s[2]], created = now - s[6] * H - 2 * H, d = DOCS[s[1]], st = s[5];
+      var recs = [];
+      var counter = { name: people[s[3][0]][0], email: people[s[3][0]][1] };
+      if (s[1] === 'offer') recs = [counter];
+      else if (st === 'action') recs = [counter, { name: owner.name, email: owner.email }];
+      else recs = [{ name: owner.name, email: owner.email }, counter];
+      recs = recs.map(function (r, k) { return { id: 'r' + k, name: r.name, email: r.email, order: k + 1, color: COLORS[k], status: 'pending', at: null }; });
+      var fields = mkFields(s[1], recs.length);
+      var audit = [{ ts: created, ev: 'Envelope created', by: owner.name }];
+      var env = { id: 'ENV-' + (4820 + i), title: s[0], doc: s[1], owner: s[2], order: s[4], recs: recs, fields: fields, status: st === 'draft' ? 'draft' : st === 'declined' ? 'declined' : 'sent', created: created, sent: st === 'draft' ? null : created + 10 * 6e4, fav: i === 0 || i === 3 || i === 5, used: now - i * 3 * H, audit: audit, shared: s[2] === 'user' && i % 2 === 0 };
+      if (st !== 'draft') audit.push({ ts: env.sent, ev: 'Sent to ' + recs.map(function (r) { return r.name; }).join(', '), by: owner.name });
+      function signRec(k, t) { var r = recs[k]; r.status = 'signed'; r.at = t; fields.forEach(function (f) { if (f.rid === k) f.value = f.type === 'sig' || f.type === 'ini' ? sigData(f.type === 'ini' ? K.initials(r.name) : r.name) : f.type === 'date' ? K.dfmt(K.iso(t)) : f.type === 'name' ? r.name : f.type === 'text' ? 'Harbor & Co. Realty' : f.type === 'check' ? true : null; }); audit.push({ ts: t - 6e4 * 3, ev: 'Viewed by ' + r.name, by: r.name }, { ts: t, ev: 'Signed by ' + r.name, by: r.name }); }
+      if (st === 'completed') { recs.forEach(function (r, k) { signRec(k, env.sent + (k + 1) * 5 * H); }); audit.push({ ts: env.sent + (recs.length * 5 + 0.1) * H, ev: 'Envelope completed · certificate issued', by: 'SignIt' }); }
+      if (st === 'action') { signRec(0, env.sent + 3 * H); }
+      if (st === 'waiting' && recs.length > 1 && s[1] !== 'offer') { signRec(0, env.sent + 0.5 * H); }
+      if (st === 'declined') { recs[0].status = 'declined'; recs[0].at = env.sent + 8 * H; audit.push({ ts: recs[0].at, ev: 'Declined by ' + recs[0].name + ': “Accepted another offer.”', by: recs[0].name }); }
+      return env;
+    });
+    return { envs: envs, seq: 4830, sigs: {} };
+  }
+
+  function role() { return K.state.role || 'admin'; }
+  function meU() { return USERS[role()]; }
+  function me() { return meU(); }
+  function mine() { return role() === 'admin' ? K.db.envs : K.db.envs.filter(function (e) { return e.owner === 'user' || e.recs.some(function (r) { return r.email === meU().email; }); }); }
+  function get(id) { return K.db.envs.filter(function (e) { return e.id === id; })[0]; }
+  function current(e) {
+    if (e.status !== 'sent') return [];
+    var pend = e.recs.filter(function (r) { return r.status === 'pending'; });
+    if (!pend.length) return [];
+    if (e.order === 'par') return pend;
+    return [pend.sort(K.by('order'))[0]];
+  }
+  function state(e) {
+    if (e.status === 'draft') return 'draft'; if (e.status === 'declined') return 'declined'; if (e.status === 'voided') return 'voided';
+    if (e.recs.every(function (r) { return r.status === 'signed'; })) return 'completed';
+    return current(e).some(function (r) { return r.email === meU().email; }) ? 'action' : 'waiting';
+  }
+  var SL = { action: ['Needs your signature', 'warn'], waiting: ['Waiting for others', 'info'], completed: ['Completed', 'ok'], draft: ['Draft', ''], declined: ['Declined', 'bad'], voided: ['Voided', 'bad'] };
+  function stB(e) { var s = SL[state(e)]; return K.badge(s[0], s[1], true); }
+  function completedAt(e) { return Math.max.apply(null, e.recs.map(function (r) { return r.at || 0; })); }
+  function addAudit(e, ev, by) { e.audit.push({ ts: Date.now(), ev: ev, by: by || meU().name }); }
+
+  /* ---------- page rendering ---------- */
+  function pagesHTML(e, mode, signerId) {
+    var d = e.upload ? null : DOCS[e.doc];
+    var pages = e.upload ? e.upload.pages : d.pages;
+    return '<div class="doc-wrap">' + pages.map(function (pg, pi) {
+      var fl = e.fields.filter(function (f) { return f.page === pi; }).map(function (f) {
+        var r = e.recs[f.rid] || { color: '#999', name: '?' }, col = r.color;
+        var filled = f.value != null && f.value !== '' && f.value !== false;
+        var mineF = mode === 'sign' && r.id === signerId;
+        var inner;
+        if (filled) inner = (f.type === 'sig' || f.type === 'ini') ? '<img src="' + f.value + '" alt="signature">' : f.type === 'check' ? '<i class="ti ti-check" style="font-size:1.3em;color:#111"></i>' : '<span style="color:#111;font-weight:500;font-family:Georgia,serif">' + E(f.value) + '</span>';
+        else inner = '<i class="ti ' + FT[f.type].i + '"></i>' + (f.type === 'check' ? '' : '<span>' + FT[f.type].l + '</span>');
+        var ro = mode === 'view' || (mode === 'sign' && !mineF);
+        var style = 'left:' + f.x + '%;top:' + f.y + '%;width:' + f.w + '%;height:' + f.h + '%;border-color:' + col + ';color:' + col + ';background:' + col + '14';
+        if (filled) style += ';border-color:transparent';
+        if (ro && !filled) style += ';opacity:' + (mode === 'sign' ? '.35' : '.8');
+        return '<div class="fld' + (filled ? ' filled' : '') + (ro && filled ? ' done-ro' : '') + '" data-f="' + f.id + '" style="' + style + '" title="' + E(FT[f.type].l + ' · ' + r.name) + '">' + inner + (mode === 'edit' ? '<span class="x" data-del="' + f.id + '">×</span>' : '') + '</div>';
+      }).join('');
+      return '<div class="doc-page' + (e.upload ? ' img' : '') + (mode === 'edit' ? ' page-click' : '') + '" data-page="' + pi + '">' + (e.upload ? '<img src="' + pg + '" alt="Page ' + (pi + 1) + '">' : pg) + fl + '</div>';
+    }).join('') + '</div>';
+  }
+
+  /* ---------- envelope drawer ---------- */
+  function openEnv(id) {
+    var e = get(id); if (!e) return; var st = state(e), cur = current(e);
+    K.drawer({
+      kicker: E(e.id) + ' · ' + (e.order === 'seq' ? 'Signing in order' : 'Sign in any order') + ' · from ' + E(USERS[e.owner].name),
+      title: E(e.title), sub: stB(e) + (e.fav ? ' ' + K.badge('★ Favorite', 'warn') : ''),
+      body:
+        '<div><p class="sec-t">Recipients</p><div class="prog" style="margin-top:6px">' + e.recs.slice().sort(K.by('order')).map(function (r) {
+          var isCur = cur.indexOf(r) > -1;
+          return '<div class="pi"><span class="avatar" style="background:' + r.color + '22;color:' + r.color + '">' + (e.order === 'seq' ? r.order : K.initials(r.name)) + '</span><div class="grow" style="flex:1;min-width:0"><b>' + E(r.name) + '</b><small class="muted" style="display:block">' + E(r.email) + '</small></div>' +
+            (r.status === 'signed' ? K.badge('Signed ' + K.ago(r.at), 'ok') : r.status === 'declined' ? K.badge('Declined', 'bad') : isCur ? K.badge(e.status === 'sent' ? 'Needs to sign' : 'Pending', 'warn') : K.badge(e.status === 'draft' ? 'Not sent' : 'Waiting', '')) + '</div>';
+        }).join('') + '</div></div>' +
+        (st === 'completed' ? '<div class="cert"><div class="row" style="gap:8px"><i class="ti ti-certificate" style="font-size:26px"></i><div><b>Certificate of completion</b><br><small class="muted">All parties signed · ' + new Date(completedAt(e)).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) + '</small></div></div><small class="muted" style="display:block;margin-top:8px">Document ID ' + E(e.id) + '-' + E(String(e.created).slice(-6)) + ' · tamper-evident seal applied</small></div>' : '') +
+        '<div><p class="sec-t">Document</p><div style="margin-top:8px;max-height:420px;overflow:auto;background:#F3F4F6;border-radius:10px;padding:12px">' + pagesHTML(e, 'view') + '</div></div>' +
+        '<div><p class="sec-t">Audit trail</p><div class="tl" style="margin-top:10px">' + e.audit.slice().reverse().map(function (a) { return '<div class="tl-i"><span class="ico-sq"><i class="ti ' + (/Signed/.test(a.ev) ? 'ti-signature' : /Viewed/.test(a.ev) ? 'ti-eye' : /Sent|Reminder/.test(a.ev) ? 'ti-send' : /completed/.test(a.ev) ? 'ti-certificate' : /Declined|Voided/.test(a.ev) ? 'ti-x' : 'ti-file-plus') + '"></i></span><div class="grow"><b style="font-weight:600">' + E(a.ev) + '</b><br><small>' + new Date(a.ts).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) + ' · IP 203.0.113.' + (a.ts % 200) + ' (demo)</small></div></div>'; }).join('') + '</div></div>',
+      foot:
+        '<button class="btn" id="favB"><i class="ti ti-star"></i>' + (e.fav ? 'Unfavorite' : 'Favorite') + '</button>' +
+        (st === 'draft' ? '<button class="btn primary" id="editB"><i class="ti ti-edit"></i>Continue editing</button>' : '') +
+        (st === 'waiting' || st === 'action' ? (e.owner === role() ? '<button class="btn" id="voidB">Void</button><button class="btn" id="remB"><i class="ti ti-bell"></i>Remind</button>' : '') + cur.map(function (r) { return '<button class="btn primary" data-sign="' + r.id + '"><i class="ti ti-signature"></i>' + (r.email === meU().email ? 'Sign now' : 'Sign as ' + E(r.name.split(' ')[0]) + ' (demo)') + '</button>'; }).join('') : '') +
+        (st === 'completed' ? '<button class="btn" id="dupB"><i class="ti ti-copy"></i>Use again</button><button class="btn primary" id="dlB"><i class="ti ti-download"></i>Download signed PDF</button>' : ''),
+      mount: function (d) {
+        d.querySelector('#favB').onclick = function () { e.fav = !e.fav; K.save(); K.toast(e.fav ? 'Added to favorites' : 'Removed from favorites'); openEnv(e.id); K.route(); };
+        var b = d.querySelector('#editB'); if (b) b.onclick = function () { K.closeDrawer(); W = { step: 3, env: e }; K.go('send'); };
+        b = d.querySelector('#remB'); if (b) b.onclick = function () { addAudit(e, 'Reminder sent to ' + cur.map(function (r) { return r.name; }).join(', ')); K.save(); K.toast('Reminder emailed to ' + cur.map(function (r) { return r.name; }).join(', ')); openEnv(e.id); };
+        b = d.querySelector('#voidB'); if (b) b.onclick = function () { e.status = 'voided'; addAudit(e, 'Voided by ' + meU().name); K.save(); K.toast('Envelope voided'); openEnv(e.id); K.route(); };
+        b = d.querySelector('#dupB'); if (b) b.onclick = function () { K.closeDrawer(); W = { step: 1, env: newEnv(e.doc, e.title.replace(/ –.*/, '') + ' – copy') }; W.env.recs = e.recs.map(function (r, k) { return { id: 'r' + k, name: r.name, email: r.email, order: r.order, color: r.color, status: 'pending', at: null }; }); W.env.fields = mkFields(e.doc, W.env.recs.length); K.go('send'); };
+        b = d.querySelector('#dlB'); if (b) b.onclick = function () { K.toast('Demo: the signed PDF + certificate would download here'); };
+        d.querySelectorAll('[data-sign]').forEach(function (x) { x.onclick = function () { K.closeDrawer(); startSigning(e.id, x.dataset.sign); }; });
+      }
+    });
+  }
+
+  /* ---------- signing ceremony ---------- */
+  var sv;
+  function startSigning(eid, rid) {
+    var e = get(eid), r = e.recs.filter(function (x) { return x.id === rid; })[0];
+    if (!sv) { sv = document.createElement('div'); sv.className = 'sign-view'; document.body.appendChild(sv); }
+    addAudit(e, 'Viewed by ' + r.name, r.name); K.save();
+    function mineF() { return e.fields.filter(function (f) { return f.rid === e.recs.indexOf(r); }); }
+    function left() { return mineF().filter(function (f) { return f.req && (f.value == null || f.value === ''); }); }
+    function paint() {
+      var L = left(), tot = mineF().filter(function (f) { return f.req; }).length;
+      sv.innerHTML = '<div class="sv-top"><span class="brand-ico" style="width:32px;height:32px;font-size:17px"><i class="ti ti-signature"></i></span><div class="grow"><b>' + E(e.title) + '</b><br><small>Signing as ' + E(r.name) + ' · ' + E(r.email) + '</small></div><button class="btn sm" id="svDecl" style="background:transparent;color:#fff;border-color:#4B5563">Decline</button><button class="btn sm" id="svClose" style="background:transparent;color:#fff;border-color:#4B5563">Finish later</button><button class="btn sm" id="svFin" style="background:#FACC15;border-color:#FACC15;color:#111"' + (L.length ? ' disabled style="opacity:.5"' : '') + '><i class="ti ti-check"></i>Finish</button></div>' +
+        '<div class="sv-guide"><i class="ti ti-hand-finger"></i>' + (L.length ? L.length + ' of ' + tot + ' required field' + (tot > 1 ? 's' : '') + ' left. Tap a highlighted field to complete it.' : 'All done! Click Finish to sign the document.') + (L.length ? ' <button class="btn sm" id="svNext" style="margin-left:auto">Next field <i class="ti ti-arrow-down"></i></button>' : '') + '</div>' +
+        '<div class="sv-body">' + pagesHTML(e, 'sign', r.id) + '</div>';
+      var nxt = L[0]; if (nxt) { var el = sv.querySelector('[data-f="' + nxt.id + '"]'); if (el) el.classList.add('active'); }
+      sv.querySelector('#svClose').onclick = function () { sv.classList.remove('open'); sv.innerHTML = ''; K.route(); };
+      sv.querySelector('#svNext') && (sv.querySelector('#svNext').onclick = function () { var el = sv.querySelector('.fld.active'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+      sv.querySelector('#svDecl').onclick = function () { K.modal({ title: 'Decline to sign?', body: K.formHTML([{ k: 'why', label: 'Reason (shared with the sender)', type: 'textarea', req: true }]), foot: '<button class="btn" data-mx>Cancel</button><button class="btn danger" id="dc">Decline</button>', mount: function (m) { m.querySelector('#dc').onclick = function () { var v = K.readForm(m); if (!v) return; r.status = 'declined'; r.at = Date.now(); e.status = 'declined'; addAudit(e, 'Declined by ' + r.name + ': “' + v.why + '”', r.name); K.save(); K.closeModal(); sv.classList.remove('open'); K.toast('You declined this document'); K.route(); }; } }); };
+      sv.querySelector('#svFin').onclick = function () {
+        if (left().length) return;
+        r.status = 'signed'; r.at = Date.now(); addAudit(e, 'Signed by ' + r.name, r.name);
+        var done = e.recs.every(function (x) { return x.status === 'signed'; });
+        if (done) addAudit(e, 'Envelope completed · certificate issued', 'SignIt');
+        else if (e.order === 'seq') { var nx = current(e)[0]; if (nx) addAudit(e, 'Sent to next signer: ' + nx.name, 'SignIt'); }
+        K.save();
+        sv.innerHTML = '<div class="sv-top"><span class="brand-ico" style="width:32px;height:32px;font-size:17px"><i class="ti ti-signature"></i></span><div class="grow"><b>' + E(e.title) + '</b></div></div><div class="sv-body" style="display:grid;place-items:center"><div class="card" style="max-width:460px;width:100%;text-align:center;padding:30px"><div class="ico-sq" style="width:64px;height:64px;border-radius:50%;margin:0 auto 14px;font-size:32px;background:var(--ok-bg);color:var(--ok)"><i class="ti ti-circle-check"></i></div><h2 style="margin:0 0 6px">' + (done ? 'Document completed' : 'You’re done signing') + '</h2><p class="muted">' + (done ? 'Everyone has signed. A copy and the certificate of completion were emailed to all parties.' : (e.order === 'seq' && current(e)[0] ? current(e)[0].name + ' has been notified to sign next.' : 'We’ll let you know when everyone has signed.')) + '</p><button class="btn primary" id="svOk">Back to SignIt</button></div></div>';
+        sv.querySelector('#svOk').onclick = function () { sv.classList.remove('open'); sv.innerHTML = ''; K.route(); openEnv(e.id); };
+        K.toast(done ? 'Envelope completed' : 'Signature recorded');
+      };
+      sv.querySelectorAll('.fld').forEach(function (el) {
+        var f = e.fields.filter(function (x) { return x.id === el.dataset.f; })[0]; if (!f || f.rid !== e.recs.indexOf(r)) return;
+        el.onclick = function () { fill(f); };
+      });
+    }
+    function fill(f) {
+      if (f.type === 'date') { f.value = K.dfmt(K.day(0)); K.save(); paint(); return; }
+      if (f.type === 'name') { f.value = r.name; K.save(); paint(); return; }
+      if (f.type === 'check') { f.value = !f.value; K.save(); paint(); return; }
+      if (f.type === 'text') { K.modal({ title: 'Enter text', body: K.formHTML([{ k: 'v', label: 'Value', req: true, full: true, val: f.value || '' }]), foot: '<button class="btn" data-mx>Cancel</button><button class="btn primary" id="ok">Apply</button>', mount: function (m) { m.querySelector('#ok').onclick = function () { var v = K.readForm(m); if (!v) return; f.value = v.v; K.save(); K.closeModal(); paint(); }; } }); return; }
+      var isIni = f.type === 'ini', key = r.email + (isIni ? '#ini' : '');
+      if (K.db.sigs[key]) { f.value = K.db.sigs[key]; K.save(); paint(); return; }
+      sigModal(isIni ? K.initials(r.name) : r.name, isIni, function (data) { K.db.sigs[key] = data; f.value = data; K.save(); paint(); });
+    }
+    sv.classList.add('open'); paint();
+  }
+  function sigModal(name, isIni, done) {
+    K.modal({ title: isIni ? 'Adopt your initials' : 'Adopt your signature', sub: 'Draw it or type it. It will be reused on this device for the rest of the demo.',
+      body: '<div class="row"><button class="chip active" data-m="type">Type</button><button class="chip" data-m="draw">Draw</button></div><div id="sgArea"></div><p class="muted" style="margin:0;font-size:12px">By selecting Adopt and sign, I agree that this is the electronic representation of my signature.</p>',
+      foot: '<button class="btn" data-mx>Cancel</button><button class="btn primary" id="adopt">Adopt and sign</button>',
+      mount: function (m) {
+        var mode = 'type', area = m.querySelector('#sgArea'), canvas, drawn = false;
+        function show() {
+          if (mode === 'type') { area.innerHTML = '<input class="inp" id="tn" value="' + E(name) + '" style="width:100%;margin-bottom:8px"><div class="typed" id="tp">' + E(name) + '</div>'; m.querySelector('#tn').oninput = function (ev) { m.querySelector('#tp').textContent = ev.target.value; }; }
+          else {
+            area.innerHTML = '<canvas class="pad" id="pad"></canvas><div class="row" style="justify-content:flex-end;margin-top:6px"><button class="btn sm" id="clr">Clear</button></div>';
+            canvas = m.querySelector('#pad'); var r = canvas.getBoundingClientRect(); canvas.width = r.width * 2; canvas.height = r.height * 2;
+            var x = canvas.getContext('2d'); x.scale(2, 2); x.lineWidth = 2.4; x.lineCap = 'round'; x.lineJoin = 'round'; x.strokeStyle = '#1e3a8a'; var down = false;
+            function pt(ev) { var b = canvas.getBoundingClientRect(); return [ev.clientX - b.left, ev.clientY - b.top]; }
+            canvas.onpointerdown = function (ev) { down = true; drawn = true; canvas.setPointerCapture(ev.pointerId); var p = pt(ev); x.beginPath(); x.moveTo(p[0], p[1]); };
+            canvas.onpointermove = function (ev) { if (!down) return; var p = pt(ev); x.lineTo(p[0], p[1]); x.stroke(); };
+            canvas.onpointerup = function () { down = false; };
+            m.querySelector('#clr').onclick = function () { x.clearRect(0, 0, canvas.width, canvas.height); drawn = false; };
+          }
+        }
+        m.querySelectorAll('[data-m]').forEach(function (b) { b.onclick = function () { mode = b.dataset.m; m.querySelectorAll('[data-m]').forEach(function (z) { z.classList.toggle('active', z === b); }); show(); }; });
+        show();
+        m.querySelector('#adopt').onclick = function () {
+          var data;
+          if (mode === 'type') { var t = m.querySelector('#tn').value.trim(); if (!t) { m.querySelector('#tn').style.borderColor = 'var(--bad)'; return; } data = sigData(t); }
+          else { if (!drawn) { K.toast('Draw your signature first'); return; } data = canvas.toDataURL('image/png'); }
+          K.closeModal(); done(data);
+        };
+      }
+    });
+  }
+
+  /* ---------- send wizard ---------- */
+  var W = null;
+  function newEnv(doc, title) { return { id: 'ENV-' + (++K.db.seq), title: title || DOCS[doc].title, doc: doc, owner: role(), order: 'seq', recs: [{ id: 'r0', name: '', email: '', order: 1, color: COLORS[0], status: 'pending', at: null }], fields: [], status: 'draft', created: Date.now(), sent: null, fav: false, used: Date.now(), audit: [{ ts: Date.now(), ev: 'Envelope created', by: meU().name }] }; }
+  function send(el) {
+    if (!W) W = { step: 1, env: null };
+    var steps = ['Choose document', 'Add recipients', 'Place fields', 'Review & send'];
+    var head = '<div class="page-head"><div><h2>Send for signature</h2><p>Prepare a document, add signers, place fields and send.</p></div><div class="actions">' + (W.env ? '<button class="btn ghost" id="cancelW">Discard</button>' : '') + '</div></div>' +
+      '<div class="wiz">' + steps.map(function (s, i) { return '<span class="ws' + (W.step === i + 1 ? ' on' : W.step > i + 1 ? ' ok' : '') + '"><b>' + (W.step > i + 1 ? '✓' : i + 1) + '</b>' + s + '</span>'; }).join('') + '</div>';
+    var body = '';
+    if (W.step === 1) {
+      body = '<div class="card"><div class="card-h"><h3>Start from a template</h3><small>Fields are already placed</small></div><div class="card-b"><div class="tpl-grid">' + Object.keys(DOCS).map(function (k) { return '<div class="tpl' + (W.env && W.env.doc === k && !W.env.upload ? ' on' : '') + '" data-doc="' + k + '"><div class="th"><i class="ti ' + DOCS[k].icon + '"></i></div><div class="tb"><b>' + DOCS[k].title + '</b><small>' + DOCS[k].pages.length + ' page' + (DOCS[k].pages.length > 1 ? 's' : '') + ' · ' + DOCS[k].fields.length + ' fields</small></div></div>'; }).join('') +
+        '<label class="tpl" style="display:block"><div class="th"><i class="ti ti-upload"></i></div><div class="tb"><b>Upload your own PDF</b><small id="upl">Stays in your browser</small></div><input type="file" accept="application/pdf" id="pdfIn" hidden></label></div></div></div>' +
+        '<div class="card"><div class="card-b row" style="justify-content:space-between"><div class="f" style="flex:1;min-width:220px"><label>Envelope name</label><input class="inp" id="eTitle" value="' + E(W.env ? W.env.title : '') + '" placeholder="Pick a document first"></div><button class="btn primary" id="n1"' + (W.env ? '' : ' disabled') + '>Next: recipients <i class="ti ti-arrow-right"></i></button></div></div>';
+    } else if (W.step === 2) {
+      var e = W.env;
+      body = '<div class="card"><div class="card-h"><h3>Who needs to sign?</h3><div class="row"><button class="chip' + (e.order === 'seq' ? ' active' : '') + '" data-ord="seq"><i class="ti ti-list-numbers"></i>Sign in order</button><button class="chip' + (e.order === 'par' ? ' active' : '') + '" data-ord="par"><i class="ti ti-arrows-split"></i>Any order</button></div></div><div class="card-b" style="display:flex;flex-direction:column;gap:10px" id="recs">' +
+        e.recs.map(function (r, i) { return '<div class="rec-row"><span class="avatar" style="background:' + r.color + '22;color:' + r.color + '">' + (e.order === 'seq' ? i + 1 : '•') + '</span><input class="inp" data-rn="' + i + '" placeholder="Full name" value="' + E(r.name) + '"><input class="inp hide-sm" data-re="' + i + '" placeholder="email@company.com" value="' + E(r.email) + '"><select class="sel hide-sm"><option>Needs to sign</option><option>Receives a copy</option></select><button class="icon-btn" data-rm="' + i + '" aria-label="Remove"' + (e.recs.length === 1 ? ' disabled' : '') + '><i class="ti ti-trash"></i></button></div>'; }).join('') +
+        '<div class="row"><button class="btn sm" id="addR"><i class="ti ti-user-plus"></i>Add recipient</button><button class="btn sm ghost" id="addMe"><i class="ti ti-user"></i>Add me (' + E(meU().name) + ')</button></div><small class="muted" id="rErr"></small></div></div>' +
+        '<div class="row" style="justify-content:space-between"><button class="btn" id="b2"><i class="ti ti-arrow-left"></i>Back</button><button class="btn primary" id="n2">Next: place fields <i class="ti ti-arrow-right"></i></button></div>';
+    } else if (W.step === 3) {
+      var e3 = W.env; W.tool = W.tool || 'sig'; W.who = W.who || 0; if (W.who >= e3.recs.length) W.who = 0;
+      body = '<div class="editor editing"><div class="palette"><div class="sec-t" style="margin:2px 0 4px">Signer</div>' + e3.recs.map(function (r, i) { return '<div class="who' + (W.who === i ? ' on' : '') + '" data-who="' + i + '"><span class="sw" style="background:' + r.color + '"></span>' + E(r.name || 'Recipient ' + (i + 1)) + '<small class="muted" style="margin-left:auto">' + e3.fields.filter(function (f) { return f.rid === i; }).length + '</small></div>'; }).join('') +
+        '<div class="sec-t" style="margin:12px 0 4px">Field</div>' + Object.keys(FT).map(function (k) { return '<div class="pal' + (W.tool === k ? ' on' : '') + '" data-tool="' + k + '"><i class="ti ' + FT[k].i + '" style="color:' + e3.recs[W.who].color + '"></i>' + FT[k].l + '</div>'; }).join('') +
+        '<small class="muted" style="margin-top:8px">Click on the page to place the field. Drag to move. Hover and press × to remove.</small></div>' +
+        '<div><div id="pages">' + pagesHTML(e3, 'edit') + '</div></div></div>' +
+        '<div class="row" style="justify-content:space-between"><button class="btn" id="b3"><i class="ti ti-arrow-left"></i>Back</button><span class="row"><button class="btn" id="save3"><i class="ti ti-device-floppy"></i>Save draft</button><button class="btn primary" id="n3">Next: review <i class="ti ti-arrow-right"></i></button></span></div>';
+    } else {
+      var e4 = W.env, noSig = e4.recs.filter(function (r, i) { return !e4.fields.some(function (f) { return f.rid === i && f.type === 'sig'; }); });
+      body = '<div class="grid g-21"><div class="card"><div class="card-h"><h3>Preview</h3><small>' + e4.fields.length + ' fields</small></div><div class="card-b" style="background:#F3F4F6;max-height:640px;overflow:auto">' + pagesHTML(e4, 'view') + '</div></div>' +
+        '<div class="card"><div class="card-h"><h3>Email to recipients</h3></div><div class="card-b" style="display:flex;flex-direction:column;gap:10px"><div class="f"><label>Subject</label><input class="inp" id="subj" value="Please sign: ' + E(e4.title) + '"></div><div class="f"><label>Message</label><textarea class="inp" rows="4" id="msg">Hi, please review and sign this document. Thank you!</textarea></div>' +
+        '<div><p class="sec-t">Recipients</p>' + e4.recs.map(function (r, i) { return '<div class="row" style="padding:6px 0"><span class="sw" style="width:10px;height:10px;border-radius:3px;background:' + r.color + '"></span><b>' + (e4.order === 'seq' ? i + 1 + '. ' : '') + E(r.name) + '</b><small class="muted">' + E(r.email) + '</small></div>'; }).join('') + '</div>' +
+        (noSig.length ? '<div class="sample" style="background:var(--warn-bg);border:1px solid #F5DFA6;border-radius:10px;padding:10px;font-size:12.5px"><i class="ti ti-alert-triangle"></i> ' + noSig.map(function (r) { return E(r.name); }).join(', ') + ' has no signature field. You can still send it.</div>' : '') +
+        '<div class="row" style="justify-content:space-between;margin-top:6px"><button class="btn" id="b4"><i class="ti ti-arrow-left"></i>Back</button><button class="btn primary" id="sendNow"><i class="ti ti-send"></i>Send envelope</button></div></div></div></div>';
+    }
+    el.innerHTML = head + body;
+    var cw = el.querySelector('#cancelW'); if (cw) cw.onclick = function () { W = null; K.route(); };
+    if (W.step === 1) {
+      el.querySelectorAll('[data-doc]').forEach(function (t) { t.onclick = function () { var title = el.querySelector('#eTitle').value; W.env = newEnv(t.dataset.doc); if (title && W.env && W.prevTitle !== title) W.env.title = title; W.prevTitle = W.env.title; K.route(); }; });
+      el.querySelector('#pdfIn').onchange = function (ev) { var f = ev.target.files[0]; if (f) loadPdf(f, el); };
+      el.querySelector('#eTitle').oninput = function (ev) { if (W.env) W.env.title = ev.target.value; };
+      el.querySelector('#n1').onclick = function () { if (!W.env) return; if (!W.env.title.trim()) { el.querySelector('#eTitle').style.borderColor = 'var(--bad)'; return; } W.step = 2; K.route(); };
+    }
+    if (W.step === 2) {
+      var e2 = W.env;
+      function sync() { el.querySelectorAll('[data-rn]').forEach(function (i) { e2.recs[+i.dataset.rn].name = i.value; }); el.querySelectorAll('[data-re]').forEach(function (i) { e2.recs[+i.dataset.re].email = i.value; }); }
+      el.querySelectorAll('[data-ord]').forEach(function (b) { b.onclick = function () { sync(); e2.order = b.dataset.ord; K.route(); }; });
+      el.querySelector('#addR').onclick = function () { sync(); if (e2.recs.length >= 5) { K.toast('Demo is limited to 5 recipients'); return; } var k = e2.recs.length; e2.recs.push({ id: 'r' + k, name: '', email: '', order: k + 1, color: COLORS[k], status: 'pending', at: null }); K.route(); };
+      el.querySelector('#addMe').onclick = function () { sync(); var empty = e2.recs.filter(function (r) { return !r.name && !r.email; })[0]; if (empty) { empty.name = meU().name; empty.email = meU().email; } else if (e2.recs.length < 5) { var k = e2.recs.length; e2.recs.push({ id: 'r' + k, name: meU().name, email: meU().email, order: k + 1, color: COLORS[k], status: 'pending', at: null }); } K.route(); };
+      el.querySelectorAll('[data-rm]').forEach(function (b) { b.onclick = function () { sync(); var i = +b.dataset.rm; e2.recs.splice(i, 1); e2.fields = e2.fields.filter(function (f) { return f.rid !== i; }).map(function (f) { if (f.rid > i) f.rid--; return f; }); e2.recs.forEach(function (r, k) { r.id = 'r' + k; r.order = k + 1; r.color = COLORS[k]; }); K.route(); }; });
+      el.querySelector('#b2').onclick = function () { sync(); W.step = 1; K.route(); };
+      el.querySelector('#n2').onclick = function () {
+        sync(); var bad = e2.recs.filter(function (r) { return !r.name.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(r.email.trim()); });
+        if (bad.length) { el.querySelector('#rErr').innerHTML = '<span style="color:var(--bad)">Enter a name and a valid email for every recipient.</span>'; return; }
+        if (!e2.fields.length && !e2.upload) e2.fields = mkFields(e2.doc, e2.recs.length);
+        W.step = 3; K.route();
+      };
+    }
+    if (W.step === 3) {
+      var e3b = W.env;
+      el.querySelectorAll('[data-who]').forEach(function (b) { b.onclick = function () { W.who = +b.dataset.who; K.route(); }; });
+      el.querySelectorAll('[data-tool]').forEach(function (b) { b.onclick = function () { W.tool = b.dataset.tool; K.route(); }; });
+      var drag = null, moved = false;
+      el.querySelectorAll('.doc-page').forEach(function (pg) {
+        pg.addEventListener('click', function (ev) {
+          if (moved) { moved = false; return; }
+          if (ev.target.closest('.fld')) return;
+          var b = pg.getBoundingClientRect(), d = FT[W.tool];
+          var x = Math.max(0, Math.min(100 - d.w, (ev.clientX - b.left) / b.width * 100 - d.w / 2)), y = Math.max(0, Math.min(100 - d.h, (ev.clientY - b.top) / b.height * 100 - d.h / 2));
+          e3b.fields.push({ id: K.uid('f'), type: W.tool, page: +pg.dataset.page, x: +x.toFixed(2), y: +y.toFixed(2), w: d.w, h: d.h, rid: W.who, value: null, req: W.tool !== 'check' });
+          K.route();
+        });
+      });
+      el.querySelectorAll('.fld').forEach(function (fe) {
+        var f = e3b.fields.filter(function (x) { return x.id === fe.dataset.f; })[0];
+        fe.addEventListener('pointerdown', function (ev) {
+          if (ev.target.dataset.del) return;
+          var pg = fe.closest('.doc-page').getBoundingClientRect();
+          drag = { f: f, fe: fe, pg: pg, sx: ev.clientX, sy: ev.clientY, ox: f.x, oy: f.y }; moved = false; fe.setPointerCapture(ev.pointerId); ev.preventDefault();
+        });
+        fe.addEventListener('pointermove', function (ev) {
+          if (!drag || drag.fe !== fe) return;
+          var dx = (ev.clientX - drag.sx) / drag.pg.width * 100, dy = (ev.clientY - drag.sy) / drag.pg.height * 100;
+          if (Math.abs(dx) + Math.abs(dy) > 0.4) moved = true;
+          f.x = Math.max(0, Math.min(100 - f.w, drag.ox + dx)); f.y = Math.max(0, Math.min(100 - f.h, drag.oy + dy));
+          fe.style.left = f.x + '%'; fe.style.top = f.y + '%';
+        });
+        fe.addEventListener('pointerup', function () { drag = null; setTimeout(function () { moved = false; }, 0); });
+        fe.addEventListener('click', function (ev) { ev.stopPropagation(); });
+      });
+      el.querySelectorAll('[data-del]').forEach(function (x) { x.addEventListener('click', function (ev) { ev.stopPropagation(); e3b.fields = e3b.fields.filter(function (f) { return f.id !== x.dataset.del; }); K.route(); }); });
+      el.querySelector('#b3').onclick = function () { W.step = 2; K.route(); };
+      el.querySelector('#n3').onclick = function () { if (!e3b.fields.length) { K.toast('Place at least one field'); return; } W.step = 4; K.route(); };
+      el.querySelector('#save3').onclick = function () { saveDraft(); };
+    }
+    if (W.step === 4) {
+      el.querySelector('#b4').onclick = function () { W.step = 3; K.route(); };
+      el.querySelector('#sendNow').onclick = function () {
+        var e5 = W.env; e5.status = 'sent'; e5.sent = Date.now(); e5.used = Date.now();
+        addAudit(e5, 'Sent to ' + (e5.order === 'seq' ? e5.recs[0].name + ' (signing in order)' : e5.recs.map(function (r) { return r.name; }).join(', ')));
+        if (!get(e5.id)) K.db.envs.unshift(e5);
+        if (e5.upload) { try { K.save(); } catch (x) {} } else K.save();
+        W = null; K.toast('Envelope sent'); K.go('agreements'); openEnv(e5.id);
+      };
+    }
+  }
+  function saveDraft() { var e = W.env; if (!get(e.id)) K.db.envs.unshift(e); e.used = Date.now(); K.save(); W = null; K.toast('Draft saved'); K.go('agreements'); }
+  function loadPdf(file, el) {
+    var lbl = el.querySelector('#upl'); lbl.textContent = 'Reading PDF…';
+    function go() {
+      var lib = window.pdfjsLib; lib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      file.arrayBuffer().then(function (buf) { return lib.getDocument({ data: buf }).promise; }).then(function (pdf) {
+        var n = Math.min(pdf.numPages, 5), out = [];
+        function next(i) {
+          if (i > n) { var env = newEnv('nda', file.name.replace(/\.pdf$/i, '')); env.upload = { pages: out }; env.doc = 'nda'; W.env = env; if (pdf.numPages > 5) K.toast('Demo shows the first 5 pages'); K.route(); return; }
+          pdf.getPage(i).then(function (pg) { var vp = pg.getViewport({ scale: 1.3 }), c = document.createElement('canvas'); c.width = vp.width; c.height = vp.height; return pg.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise.then(function () { out.push(c.toDataURL('image/jpeg', 0.72)); next(i + 1); }); });
+        }
+        next(1);
+      }).catch(function () { lbl.textContent = 'Couldn’t read that PDF'; K.toast('That PDF couldn’t be opened. Try another file.'); });
+    }
+    if (window.pdfjsLib) go(); else { var s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js'; s.onload = go; s.onerror = function () { lbl.textContent = 'PDF reader unavailable'; }; document.head.appendChild(s); }
+  }
+
+  /* ---------- views ---------- */
+  function kpi(ic, l, v, d, go) { return '<div class="card kpi"' + (go ? ' style="cursor:pointer" data-go="' + go + '"' : '') + '><span class="lbl"><i class="ti ' + ic + '"></i>' + l + '</span><span class="val">' + v + '</span>' + d + '</div>'; }
+  function wire(el) { el.querySelectorAll('[data-env]').forEach(function (r) { r.onclick = function () { openEnv(r.dataset.env); }; }); el.querySelectorAll('[data-go]').forEach(function (k) { k.onclick = function () { AF.tab = k.dataset.go; K.go('agreements'); }; }); el.querySelectorAll('[data-quick]').forEach(function (b) { b.onclick = function (ev) { ev.stopPropagation(); var e = get(b.dataset.quick); var r = current(e).filter(function (x) { return x.email === meU().email; })[0]; startSigning(e.id, r.id); }; }); }
+
+  function home(el) {
+    var M = mine(), by = function (s) { return M.filter(function (e) { return state(e) === s; }); };
+    var act = by('action'), wait = by('waiting'), comp = by('completed').filter(function (e) { return Date.now() - completedAt(e) < 30 * 24 * H; });
+    var weeks = [], sent = []; for (var w = 7; w >= 0; w--) { var end = Date.now() - w * 7 * 24 * H; weeks.push(new Date(end).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })); sent.push([6, 9, 7, 11, 8, 12, 10, 0][7 - w] + M.filter(function (e) { return e.sent && e.sent > end - 7 * 24 * H && e.sent <= end; }).length); }
+    var recent = []; M.forEach(function (e) { e.audit.forEach(function (a) { recent.push({ e: e, a: a }); }); }); recent.sort(function (a, b) { return b.a.ts - a.a.ts; });
+    el.innerHTML = '<div class="page-head"><div><h2>Welcome back, ' + E(meU().name.split(' ')[0]) + '</h2><p>' + (act.length ? 'You have ' + act.length + ' document' + (act.length > 1 ? 's' : '') + ' waiting for your signature.' : 'Nothing needs your signature right now.') + '</p></div><div class="actions"><button class="btn primary" id="startB"><i class="ti ti-send"></i>Send for signature</button></div></div>' +
+      '<div class="grid g-4">' + kpi('ti-signature', 'Action required', act.length, '<span class="delta' + (act.length ? ' down' : '') + '">Waiting on you</span>', 'action') + kpi('ti-hourglass', 'Waiting for others', wait.length, '<span class="delta">Out for signature</span>', 'waiting') + kpi('ti-circle-check', 'Completed (30 days)', comp.length, '<span class="delta up">Avg 6h to complete</span>', 'completed') + kpi('ti-file-pencil', 'Drafts', by('draft').length, '<span class="delta">Not sent yet</span>', 'draft') + '</div>' +
+      '<div class="grid g-2"><div class="card"><div class="card-h"><h3>Needs your signature</h3><a class="btn sm ghost" href="#/agreements">All agreements</a></div><div class="list">' + (act.map(function (e) { return '<div class="li" data-env="' + e.id + '" style="cursor:pointer"><span class="ico-sq" style="background:#FEF9C3;color:#A16207"><i class="ti ti-signature"></i></span><div class="grow"><b>' + E(e.title) + '</b><small>From ' + E(USERS[e.owner].name) + ' · sent ' + K.ago(e.sent) + '</small></div><button class="btn primary sm" data-quick="' + e.id + '">Sign</button></div>'; }).join('') || '<div class="empty"><i class="ti ti-mood-check" style="font-size:28px"></i><br>You’re all caught up.</div>') + '</div></div>' +
+      '<div class="card"><div class="card-h"><h3>Recent activity</h3></div><div class="list">' + recent.slice(0, 6).map(function (x) { return '<div class="li" data-env="' + x.e.id + '" style="cursor:pointer"><span class="ico-sq"><i class="ti ' + (/Signed/.test(x.a.ev) ? 'ti-signature' : /completed/.test(x.a.ev) ? 'ti-certificate' : /Declined|Voided/.test(x.a.ev) ? 'ti-x' : /Viewed/.test(x.a.ev) ? 'ti-eye' : 'ti-send') + '"></i></span><div class="grow"><b>' + E(x.a.ev) + '</b><small>' + E(x.e.title) + ' · ' + K.ago(x.a.ts) + '</small></div></div>'; }).join('') + '</div></div></div>' +
+      '<div class="card"><div class="card-h"><h3>Envelopes sent</h3><small>Last 8 weeks</small></div><div class="card-b">' + K.bars(weeks.map(function (w, i) { return { l: w, v: sent[i] }; }), { w: 1100, h: 220, int: true, fmt: function (v) { return Math.round(v); } }) + '</div></div>';
+    el.querySelector('#startB').onclick = function () { W = null; K.go('send'); };
+    wire(el);
+  }
+
+  var AF = { tab: 'all', q: '', quick: 'all' };
+  function agreements(el) {
+    var tabs = [['all', 'All'], ['action', 'Action required'], ['waiting', 'Waiting for others'], ['completed', 'Completed'], ['draft', 'Drafts'], ['declined', 'Declined & voided']];
+    var M = mine();
+    var quick = [['all', 'Everything', 'ti-inbox'], ['mine', 'Created by me', 'ti-user'], ['shared', 'Shared with me', 'ti-users'], ['fav', 'Favorites', 'ti-star'], ['recent', 'Recently used', 'ti-clock']];
+    el.innerHTML = '<div class="page-head"><div><h2>Agreements</h2><p>Every envelope you sent, received or can access.</p></div><div class="actions"><button class="btn primary" id="startB"><i class="ti ti-send"></i>Send for signature</button></div></div>' +
+      '<div class="row">' + quick.map(function (q) { return '<button class="chip' + (AF.quick === q[0] ? ' active' : '') + '" data-q="' + q[0] + '"><i class="ti ' + q[2] + '"></i>' + q[1] + '</button>'; }).join('') + '</div>' +
+      '<div class="card"><div class="tabs" style="overflow-x:auto">' + tabs.map(function (t) { var n = t[0] === 'all' ? M.length : M.filter(function (e) { return t[0] === 'declined' ? /declined|voided/.test(state(e)) : state(e) === t[0]; }).length; return '<button class="tab' + (AF.tab === t[0] ? ' active' : '') + '" data-t="' + t[0] + '">' + t[1] + ' <span class="muted">' + n + '</span></button>'; }).join('') + '</div>' +
+      '<div class="toolbar"><label class="search"><i class="ti ti-search"></i><input id="q" placeholder="Search by name or recipient" value="' + E(AF.q) + '"></label><span class="muted" id="cnt" style="margin-left:auto"></span></div><div class="tbl-wrap" id="tw"></div></div>';
+    function draw() {
+      var rows = M.filter(function (e) {
+        var s = state(e);
+        if (AF.tab !== 'all' && (AF.tab === 'declined' ? !/declined|voided/.test(s) : s !== AF.tab)) return false;
+        if (AF.quick === 'mine' && e.owner !== role()) return false;
+        if (AF.quick === 'shared' && !(e.owner !== role() || e.shared)) return false;
+        if (AF.quick === 'fav' && !e.fav) return false;
+        if (AF.q && (e.title + ' ' + e.recs.map(function (r) { return r.name + ' ' + r.email; }).join(' ')).toLowerCase().indexOf(AF.q.toLowerCase()) < 0) return false;
+        return true;
+      }).sort(AF.quick === 'recent' ? K.by('used', true) : function (a, b) { return (b.sent || b.created) - (a.sent || a.created); });
+      if (AF.quick === 'recent') rows = rows.slice(0, 6);
+      el.querySelector('#cnt').textContent = rows.length + ' envelopes';
+      el.querySelector('#tw').innerHTML = rows.length ? '<table class="tbl"><thead><tr><th></th><th>Envelope</th><th>Status</th><th>Recipients</th><th>Progress</th><th>Last change</th></tr></thead><tbody>' + rows.map(function (e) {
+        var signed = e.recs.filter(function (r) { return r.status === 'signed'; }).length, last = e.audit[e.audit.length - 1];
+        return '<tr class="click" data-env="' + e.id + '"><td style="width:28px;color:' + (e.fav ? '#EAB308' : 'var(--line)') + '"><i class="ti ti-star"></i></td><td><div class="cell-main"><span class="ico-sq" style="background:#F3F4F6;color:#374151"><i class="ti ' + (e.upload ? 'ti-file-type-pdf' : DOCS[e.doc].icon) + '"></i></span><div><b>' + E(e.title) + '</b><small>' + E(e.id) + ' · from ' + E(USERS[e.owner].name) + (e.shared ? ' · shared' : '') + '</small></div></div></td><td>' + stB(e) + '</td><td><div class="row" style="gap:4px">' + e.recs.map(function (r) { return '<span class="avatar" title="' + E(r.name) + '" style="width:26px;height:26px;font-size:10px;background:' + r.color + '22;color:' + r.color + ';' + (r.status === 'signed' ? 'box-shadow:0 0 0 2px #16A34A' : '') + '">' + K.initials(r.name) + '</span>'; }).join('') + '</div></td><td style="min-width:110px"><div class="bar"><span style="width:' + Math.round(100 * signed / e.recs.length) + '%;background:' + (signed === e.recs.length ? '#16A34A' : 'var(--accent)') + '"></span></div><small class="muted">' + signed + ' of ' + e.recs.length + ' signed</small></td><td class="muted nowrap">' + K.ago(last.ts) + '</td></tr>';
+      }).join('') + '</tbody></table>' : '<div class="empty"><i class="ti ti-files" style="font-size:28px"></i><br>No envelopes here.</div>';
+      wire(el);
+    }
+    el.querySelectorAll('[data-t]').forEach(function (b) { b.onclick = function () { AF.tab = b.dataset.t; K.route(); }; });
+    el.querySelectorAll('[data-q]').forEach(function (b) { b.onclick = function () { AF.quick = b.dataset.q; K.route(); }; });
+    el.querySelector('#q').oninput = function (e) { AF.q = e.target.value; draw(); };
+    el.querySelector('#startB').onclick = function () { W = null; K.go('send'); };
+    draw();
+  }
+
+  function templates(el) {
+    el.innerHTML = '<div class="page-head"><div><h2>Templates</h2><p>Reusable documents with fields already placed. Using a template always creates a brand-new envelope.</p></div></div>' +
+      '<div class="tpl-grid" style="grid-template-columns:repeat(auto-fill,minmax(230px,1fr))">' + Object.keys(DOCS).map(function (k) { var d = DOCS[k], uses = K.db.envs.filter(function (e) { return e.doc === k && !e.upload; }).length; return '<div class="tpl" style="cursor:default"><div class="th" style="height:150px"><i class="ti ' + d.icon + '"></i></div><div class="tb"><b>' + d.title + '</b><small>' + d.pages.length + ' page' + (d.pages.length > 1 ? 's' : '') + ' · ' + d.fields.length + ' fields · used ' + uses + '×</small><div class="row" style="margin-top:10px"><button class="btn sm primary" data-use="' + k + '">Use template</button><button class="btn sm" data-pv="' + k + '">Preview</button></div></div></div>'; }).join('') + '</div>';
+    el.querySelectorAll('[data-use]').forEach(function (b) { b.onclick = function () { W = { step: 2, env: newEnv(b.dataset.use) }; W.env.recs = [{ id: 'r0', name: '', email: '', order: 1, color: COLORS[0], status: 'pending', at: null }]; if (DOCS[b.dataset.use].fields.some(function (f) { return f.r === 1; })) W.env.recs.push({ id: 'r1', name: meU().name, email: meU().email, order: 2, color: COLORS[1], status: 'pending', at: null }); K.go('send'); }; });
+    el.querySelectorAll('[data-pv]').forEach(function (b) { b.onclick = function () { var k = b.dataset.pv, tmp = { doc: k, recs: [{ name: 'Signer 1', color: COLORS[0] }, { name: 'Signer 2', color: COLORS[1] }], fields: mkFields(k, 2) }; K.drawer({ title: DOCS[k].title, sub: 'Template preview', body: '<div style="background:#F3F4F6;border-radius:10px;padding:12px">' + pagesHTML(tmp, 'view') + '</div>' }); }; });
+  }
+
+  function team(el) {
+    if (role() !== 'admin') { el.innerHTML = '<div class="page-head"><div><h2>Team</h2></div></div><div class="card"><div class="empty"><i class="ti ti-lock" style="font-size:30px"></i><br><b>Admins only</b><br>Company users can’t manage the team.</div></div>'; return; }
+    var team = [['Mia Briones', 'mia@northwindco.com', 'Admin', 'Now'], ['Jordan Lee', 'jordan@northwindco.com', 'User', '25m ago'], ['Priya Shah', 'priya@northwindco.com', 'User', 'Yesterday'], ['Marco Reyes', 'marco@northwindco.com', 'User', 'Invited · pending']];
+    el.innerHTML = '<div class="page-head"><div><h2>Team</h2><p>Northwind Co. workspace. Data is isolated per company, so other companies can’t see your documents.</p></div><div class="actions"><button class="btn primary" id="inv"><i class="ti ti-user-plus"></i>Invite user</button></div></div>' +
+      '<div class="grid g-3">' + kpi('ti-users', 'Seats used', '4 / 10', '<span class="delta">Business plan</span>') + kpi('ti-send', 'Envelopes this month', K.db.envs.filter(function (e) { return e.sent && Date.now() - e.sent < 30 * 24 * H; }).length, '<span class="delta">Unlimited on this plan</span>') + kpi('ti-shield-check', 'Security', 'Audit trail on', '<span class="delta up">Every action is logged</span>') + '</div>' +
+      '<div class="card"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>User</th><th>Role</th><th>Envelopes sent</th><th>Last active</th><th></th></tr></thead><tbody>' + team.map(function (t, i) { return '<tr><td><div class="cell-main">' + K.avatar(t[0], COLORS[i]) + '<div><b>' + t[0] + '</b><small>' + t[1] + '</small></div></div></td><td>' + K.badge(t[2], t[2] === 'Admin' ? 'acc' : '') + '</td><td>' + (i === 0 ? K.db.envs.filter(function (e) { return e.owner === 'admin'; }).length : i === 1 ? K.db.envs.filter(function (e) { return e.owner === 'user'; }).length : 0) + '</td><td class="muted">' + t[3] + '</td><td class="right">' + (i ? '<button class="btn sm ghost">Manage</button>' : '') + '</td></tr>'; }).join('') + '</tbody></table></div></div>';
+    el.querySelector('#inv').onclick = function () { K.modal({ title: 'Invite a teammate', sub: 'They’ll get an email to set their own password.', body: K.formHTML([{ k: 'name', label: 'Name', req: true }, { k: 'email', label: 'Work email', type: 'email', req: true, err: 'Enter a valid email' }, { k: 'role', label: 'Role', type: 'select', opts: ['User', 'Admin'], full: true }]), foot: '<button class="btn" data-mx>Cancel</button><button class="btn primary" id="sv">Send invite</button>', mount: function (m) { m.querySelector('#sv').onclick = function () { var v = K.readForm(m); if (!v) return; K.closeModal(); K.toast('Invite sent to ' + v.email); }; } }); };
+  }
+
+  K.start({
+    key: 'signit', name: 'SignIt', tagline: 'E-signatures made simple', icon: 'ti-signature',
+    accent: '#18181B', accent2: '#FACC15', accentSoft: 'rgba(24,24,27,.07)', currency: 'USD', searchPh: 'Search agreements…',
+    roles: [{ v: 'admin', l: 'Admin (Mia)' }, { v: 'user', l: 'User (Jordan)' }],
+    me: me, seed: seed,
+    nav: [
+      { id: 'home', label: 'Home', icon: 'ti-home' },
+      { id: 'send', label: 'Send for signature', icon: 'ti-send' },
+      { id: 'agreements', label: 'Agreements', icon: 'ti-files', count: function () { return mine().filter(function (e) { return state(e) === 'action'; }).length; } },
+      { id: 'templates', label: 'Templates', icon: 'ti-template' },
+      { id: 'team', label: 'Team', icon: 'ti-users', group: 'Admin' }],
+    views: { home: home, send: send, agreements: agreements, templates: templates, team: team },
+    onSearch: function (q) { AF.q = q; AF.tab = 'all'; K.go('agreements'); },
+    notifications: function () { var a = mine().filter(function (e) { return state(e) === 'action'; }), c = mine().filter(function (e) { return state(e) === 'completed'; }).sort(function (x, y) { return completedAt(y) - completedAt(x); }).slice(0, 3); return '<div class="list">' + a.map(function (e) { return '<div class="li"><span class="ico-sq" style="background:#FEF9C3;color:#A16207"><i class="ti ti-signature"></i></span><div class="grow"><b>Please sign: ' + E(e.title) + '</b><small>From ' + E(USERS[e.owner].name) + '</small></div></div>'; }).join('') + c.map(function (e) { return '<div class="li"><span class="ico-sq" style="background:var(--ok-bg);color:var(--ok)"><i class="ti ti-certificate"></i></span><div class="grow"><b>Completed: ' + E(e.title) + '</b><small>' + K.ago(completedAt(e)) + '</small></div></div>'; }).join('') + '</div>'; }
+  });
+})();
+
+</script>
+</body>
+</html>
